@@ -9,11 +9,9 @@
   <nav>
     <RouterLink to="/">Go to Home</RouterLink>
     <RouterLink to="/login">Login</RouterLink>
+    <RouterLink to="/register">Register</RouterLink>
   </nav>
   <main>
     <RouterView />
   </main>
 </template>
-
-<style scoped>
-</style>

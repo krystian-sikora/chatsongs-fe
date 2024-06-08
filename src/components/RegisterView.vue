@@ -19,6 +19,7 @@ const authStore = useAuthStore()
 
 const formSchema = toTypedSchema(z.object({
   email: z.string().email(),
+  username: z.string().min(3).max(50),
   password: z.string().min(6).max(30),
 }))
 
@@ -28,11 +29,11 @@ const form = useForm({
 
 const onSubmit = form.handleSubmit((values) => {
   console.log('Form submitted!', values)
-  login(values.email, values.password)
+  register(values.email ,values.username, values.password)
 })
 
-async function login(email, password) {
-  authStore.login(email, password)
+async function register(email, login, password) {
+  authStore.register(email, login, password)
 }
 
 </script>
@@ -43,10 +44,22 @@ async function login(email, password) {
       <FormItem>
         <FormLabel>Email</FormLabel>
         <FormControl>
-          <Input type="text" placeholder="chat@songs.com" v-bind="componentField" />
+          <Input type="text" placeholder="example@email.com" v-bind="componentField" />
         </FormControl>
         <FormDescription>
           This is your email.
+        </FormDescription>
+        <FormMessage />
+      </FormItem>
+    </FormField>
+    <FormField v-slot="{ componentField }" name="username">
+      <FormItem>
+        <FormLabel>Username</FormLabel>
+        <FormControl>
+          <Input type="text" placeholder="chatsongs" v-bind="componentField" />
+        </FormControl>
+        <FormDescription>
+          This is your public display name.
         </FormDescription>
         <FormMessage />
       </FormItem>
