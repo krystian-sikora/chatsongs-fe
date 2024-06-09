@@ -14,8 +14,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useAuthStore } from "@/store/authStore.js";
+import { watch } from "vue";
+import { storeToRefs } from "pinia";
+import router from "@/router/router.js";
 
 const authStore = useAuthStore()
+const authRefs = storeToRefs(authStore)
 
 const formSchema = toTypedSchema(z.object({
   email: z.string().email(),
@@ -28,12 +32,16 @@ const form = useForm({
 
 const onSubmit = form.handleSubmit((values) => {
   console.log('Form submitted!', values)
-  login(values.email, values.password)
+  authStore.login(values.email, values.password)
 })
 
-async function login(email, password) {
-  authStore.login(email, password)
-}
+watch(authRefs.tokens, async (tokens) => {
+  if (tokens['access_token'] && tokens['refresh_token']) {
+    await router.push('/')
+  } else {
+    console.warn('no tokens detected')
+  }
+})
 
 </script>
 
@@ -43,7 +51,7 @@ async function login(email, password) {
       <FormItem>
         <FormLabel>Email</FormLabel>
         <FormControl>
-          <Input type="text" placeholder="chat@songs.com" v-bind="componentField" />
+          <Input type="text" placeholder="example@email.com" v-bind="componentField" />
         </FormControl>
         <FormDescription>
           This is your email.

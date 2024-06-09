@@ -1,16 +1,25 @@
 <script setup>
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+} from '@/components/ui/navigation-menu'
 </script>
 
 <template>
-  <h1>Hello App!</h1>
-  <p>
-    <strong>Current route path:</strong> {{ $route.fullPath }}
-  </p>
-  <nav>
-    <RouterLink to="/">Go to Home</RouterLink>
-    <RouterLink to="/login">Login</RouterLink>
-    <RouterLink to="/register">Register</RouterLink>
-  </nav>
+  <NavigationMenu>
+    <NavigationMenuList>
+      <NavigationMenuItem>
+        <RouterLink to="/">Go to Home</RouterLink>
+      </NavigationMenuItem>
+      <NavigationMenuItem>
+        <RouterLink to="/login">Login</RouterLink>
+      </NavigationMenuItem>
+      <NavigationMenuItem>
+        <RouterLink to="/register">Register</RouterLink>
+      </NavigationMenuItem>
+    </NavigationMenuList>
+  </NavigationMenu>
   <main>
     <RouterView />
   </main>

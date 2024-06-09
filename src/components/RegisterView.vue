@@ -14,8 +14,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useAuthStore } from "@/store/authStore.js";
+import { watch } from "vue";
+import router from "@/router/router.js";
+import { storeToRefs } from "pinia";
 
 const authStore = useAuthStore()
+const authRefs = storeToRefs(authStore)
 
 const formSchema = toTypedSchema(z.object({
   email: z.string().email(),
@@ -29,12 +33,16 @@ const form = useForm({
 
 const onSubmit = form.handleSubmit((values) => {
   console.log('Form submitted!', values)
-  register(values.email ,values.username, values.password)
+  authStore.register(values.email ,values.username, values.password)
 })
 
-async function register(email, login, password) {
-  authStore.register(email, login, password)
-}
+watch(authRefs.tokens, async (tokens) => {
+  if (tokens['access_token'] && tokens['refresh_token']) {
+    await router.push('/')
+  } else {
+    console.warn('no tokens detected')
+  }
+})
 
 </script>
 

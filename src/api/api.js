@@ -13,7 +13,7 @@ export async function register(email, username, password) {
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: apiUrl + 'api/auth/register',
+        url: apiUrl + '/auth/register',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -34,12 +34,43 @@ export async function login(email, password) {
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: apiUrl + 'api/auth/authenticate',
+        url: apiUrl + '/auth/authenticate',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
         },
         data : data
+    };
+
+    return axios.request(config)
+}
+
+export async function getChats(token) {
+
+    let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/chat',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    };
+
+    return axios.request(config)
+}
+
+// field users is an array of user id's to be added to new chat
+export async function createChat(token, users) {
+
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/chat',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        data : users
     };
 
     return axios.request(config)
