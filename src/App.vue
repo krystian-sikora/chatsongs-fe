@@ -7,7 +7,7 @@ import {
 </script>
 
 <template>
-  <NavigationMenu>
+  <NavigationMenu class="mb-5">
     <NavigationMenuList>
       <NavigationMenuItem>
         <RouterLink to="/">Go to Home</RouterLink>
@@ -17,6 +17,9 @@ import {
       </NavigationMenuItem>
       <NavigationMenuItem>
         <RouterLink to="/register">Register</RouterLink>
+      </NavigationMenuItem>
+      <NavigationMenuItem>
+        <RouterLink to="/contacts">Add Contact</RouterLink>
       </NavigationMenuItem>
     </NavigationMenuList>
   </NavigationMenu>

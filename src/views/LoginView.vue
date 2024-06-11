@@ -3,7 +3,7 @@
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from 'zod'
 import { useForm } from "vee-validate";
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button/index.js'
 import {
   FormControl,
   FormDescription,
@@ -11,8 +11,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+} from '@/components/ui/form/index.js'
+import { Input } from '@/components/ui/input/index.js'
 import { useAuthStore } from "@/store/authStore.js";
 import { watch } from "vue";
 import { storeToRefs } from "pinia";
@@ -46,7 +46,7 @@ watch(authRefs.tokens, async (tokens) => {
 </script>
 
 <template>
-  <form class="w-2/3 space-y-6" @submit="onSubmit">
+  <form class="w-2/5 space-y-6 container mt-40 p-7 border rounded-md" @submit="onSubmit">
     <FormField v-slot="{ componentField }" name="email">
       <FormItem>
         <FormLabel>Email</FormLabel>
@@ -71,8 +71,9 @@ watch(authRefs.tokens, async (tokens) => {
         <FormMessage />
       </FormItem>
     </FormField>
-    <Button type="submit">
+    <Button type="submit" class="w-full">
       Submit
     </Button>
+    <p class="text-gray-400 text-center m-auto">Don't have an account? <RouterLink to="/register">Click here.</RouterLink></p>
   </form>
 </template>

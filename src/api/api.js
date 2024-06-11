@@ -45,6 +45,20 @@ export async function login(email, password) {
     return axios.request(config)
 }
 
+export async function refresh(token) {
+
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'localhost:8080/api/auth/refresh',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    };
+
+    return axios.request(config)
+}
+
 export async function getChats(token) {
 
     let config = {
@@ -71,6 +85,35 @@ export async function createChat(token, users) {
             'Authorization': `Bearer ${token}`
         },
         data : users
+    };
+
+    return axios.request(config)
+}
+
+export async function addContact(token, userId){
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/contact',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        data : userId
+    };
+
+    return axios.request(config)
+}
+
+export async function getContacts(token) {
+    let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/contact',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
     };
 
     return axios.request(config)
