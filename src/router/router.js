@@ -7,7 +7,8 @@ import Contacts from "@/components/Contacts.vue";
 import { useAuthStore } from "@/store/authStore.js";
 
 const routes = [
-    { path: '/', component: HomeView },
+    { path: '/', redirect: '/chat' },
+    { path: '/chat', component: HomeView },
     { path: '/chat/:id', component: HomeView, props: true },
     { path: '/login', component: LoginView },
     { path: '/register', component: RegisterView },

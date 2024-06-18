@@ -3,7 +3,7 @@
 import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
 import { useChatStore } from "@/store/chatStore.js";
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import {computed, nextTick, onMounted, onUnmounted, onUpdated, ref, watch} from "vue";
 import ChatPreview from "@/components/ChatPreview.vue";
 import { Button } from "@/components/ui/button/index.js";
 import Chat from "@/components/Chat.vue";
@@ -29,20 +29,33 @@ const chats = computed(() => {
 })
 
 const currentChat = ref(chatRefs.chats.value[0])
-const isCreatingNewChat = ref(true)
+const isCreatingNewChat = ref(false)
 let stompClient = null
 
 onMounted(() => {
   if (!token) return
 
-  currentChat.value = props.id
-
   chatStore.getChats(token)
+
+  if (!props.id) {
+    watch(
+        () => chatStore.chats,
+        (newChats) => {
+          if (newChats.length > 0) {
+            router.push(`chat/${newChats[0].id}`)
+          }
+        }
+    )
+  }
   initWebSocketConnection()
 })
 
 onUnmounted(() => {
   if (stompClient) stompClient.disconnect()
+})
+
+onUpdated(() => {
+  currentChat.value = chatRefs.chats.value.find(c => c.id === Number(props.id))
 })
 
 function initWebSocketConnection() {
@@ -69,13 +82,13 @@ function createDummyChat() {
 function viewChat(chat) {
   isCreatingNewChat.value = false
   currentChat.value = chat
-  router.push({path: `/chat/${chat.id}`})
+  router.push({ path: `/chat/${chat.id}` })
 }
 
 </script>
 
 <template>
-  <div class="h-screen">
+  <div class="h-screen" >
     <h1 v-if="authRefs.tokens.value['access_token']">Hello, {{ authRefs.user.value['nickname']}}</h1>
     <div class="grid grid-cols-12 h-5/6">
 
@@ -88,7 +101,7 @@ function viewChat(chat) {
 
       <div class="col-span-8 p-6 border rounded-md mx-5">
         <CreateChat v-if="isCreatingNewChat" v-bind:currentChat="currentChat" v-bind:isCreatingNewChat="isCreatingNewChat"></CreateChat>
-        <Chat v-else v-bind:currentChat="currentChat" v-bind:stompClient="stompClient"></Chat>
+        <Chat v-else-if="props.id && currentChat" v-bind:currentChat="currentChat" v-bind:stompClient="stompClient"></Chat>
       </div>
     </div>
   </div>

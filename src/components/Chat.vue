@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input'
 import { Button } from "@/components/ui/button/index.js";
-import {onMounted, ref} from "vue";
+import {nextTick, onMounted, onUpdated, ref, watch} from "vue";
 import Message from "@/components/Message.vue";
 import {ScrollArea} from "@/components/ui/scroll-area/index.js";
 import {useAuthStore} from "@/store/authStore.js";
@@ -13,12 +13,12 @@ const props = defineProps(['currentChat', 'stompClient'])
 
 const authStore = useAuthStore()
 const authRefs = storeToRefs(authStore)
+const token = authRefs.tokens.value['access_token']
 
 const contactStore = useContactStore()
 const contactRefs = storeToRefs(contactStore)
 
 const chatInput = ref('')
-const scrollAreaRef = ref(null)
 const contentRef = ref(null)
 
 function sendMessage() {
@@ -35,18 +35,25 @@ function sendMessage() {
 
 onMounted(() => {
   scrollToBottom()
+  contactStore.getContacts(token)
 })
 
-const scrollToBottom = () => {
-  const scrollArea = scrollAreaRef.value
-  const content = contentRef.value
-  console.log(scrollArea)
-  console.log(content.scrollHeight)
-  if (scrollArea) {
-    scrollArea.scrollTop = content.scrollHeight
-    console.log('xd?')
-  }
-};
+onUpdated(() => {
+  scrollToBottom()
+})
+
+watch(
+    () => props.currentChat.messages,
+    () => scrollToBottom()
+)
+
+function scrollToBottom() {
+  if (props.currentChat.messages.length === 0) return
+  nextTick(() => {
+    if (contentRef.value === null) return
+    contentRef.value[contentRef.value.length - 1].scrollIntoView(false)
+  })
+}
 
 </script>
 
@@ -54,14 +61,12 @@ const scrollToBottom = () => {
   <div class="relative">
     <h1>Selected chat: {{ props.currentChat.name }}</h1>
     <ScrollArea ref="scrollAreaRef" class="h-[700px]">
-      <div ref="contentRef">
-        <div v-for="message in props.currentChat.messages">
+        <div v-for="message in props.currentChat.messages" ref="contentRef">
           <Message v-bind:message="message" v-bind:authRefs="authRefs" v-bind:contactRefs="contactRefs"></Message>
         </div>
-      </div>
     </ScrollArea>
-    <div class="absolute bottom-[-47px] flex">
-      <Input type="text" v-model="chatInput" class="inline-block"></Input>
+    <div class="absolute bottom-[-3.25rem] flex w-full">
+      <Input type="text" v-model="chatInput" class="inline-block w-[100%] mx-2"></Input>
       <Button class="inline-block" @click="sendMessage()">Send</Button>
     </div>
   </div>
