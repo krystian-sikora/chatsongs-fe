@@ -28,7 +28,6 @@ onUpdated(() => {
 async function evalMessage() {
   senderId.value = props.message.senderId
   userId.value = props.authRefs.user.value.id
-  console.log(props.contactRefs.contacts.value)
   // if (isUserMessage.value) return
   // sender.value = props.contactRefs.contacts.value.find(c => c.id === senderId.value)
   // console.log(props.contactRefs.contacts.value)

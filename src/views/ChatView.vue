@@ -30,7 +30,6 @@ const chats = computed(() => {
 
 const currentChat = ref(chatRefs.chats.value[0])
 const isCreatingNewChat = ref(false)
-let stompClient = null
 
 onMounted(() => {
   if (!token) return
@@ -47,32 +46,11 @@ onMounted(() => {
         }
     )
   }
-  initWebSocketConnection()
-})
-
-onUnmounted(() => {
-  if (stompClient) stompClient.disconnect()
 })
 
 onUpdated(() => {
   currentChat.value = chatRefs.chats.value.find(c => c.id === Number(props.id))
 })
-
-function initWebSocketConnection() {
-  let socket = new SockJS('http://localhost:8080/chat');
-  stompClient = Stomp.over(socket);
-  stompClient.connect({'Authorization': `Bearer ${token}`}, function(frame) {
-    console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/messages', function(messageOutput) {
-      console.log(messageOutput.body)
-    });
-    stompClient.subscribe(`/user/${authRefs.user.value['id']}/queue/messages`, (message) => {
-      // console.log(`Received direct msg: ${message.body}`)
-      let json = JSON.parse(message.body)
-      chatRefs.chats.value.find(c => c['id'] === json['chatId']).messages.push(json)
-    });
-  });
-}
 
 function createDummyChat() {
   const id = authRefs.user.value['id']
@@ -101,7 +79,7 @@ function viewChat(chat) {
 
       <div class="col-span-8 p-6 border rounded-md mx-5">
         <CreateChat v-if="isCreatingNewChat" v-bind:currentChat="currentChat" v-bind:isCreatingNewChat="isCreatingNewChat"></CreateChat>
-        <Chat v-else-if="props.id && currentChat" v-bind:currentChat="currentChat" v-bind:stompClient="stompClient"></Chat>
+        <Chat v-else-if="props.id && currentChat" v-bind:currentChat="currentChat"></Chat>
       </div>
     </div>
   </div>
