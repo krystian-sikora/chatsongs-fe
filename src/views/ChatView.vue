@@ -99,7 +99,7 @@ function updateIsCreatingNewChat(bool) {
       <ScrollArea class="col-span-3 p-6 border rounded-md mx-5 pt-20">
         <Button @click="isCreatingNewChat=!isCreatingNewChat" class="absolute top-5">Create new chat</Button>
         <div v-if="chats" v-for="chat in chatRefs.chats.value" @click="viewChat(chat)" class="cursor-pointer">
-          <ChatPreview v-bind:chat="chat"></ChatPreview>
+          <ChatPreview :chat="chat" :id="props.id"></ChatPreview>
         </div>
       </ScrollArea>
 
