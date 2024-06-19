@@ -82,7 +82,7 @@ function viewChat(chat) {
 </script>
 
 <template>
-  <div class="h-screen" >
+  <div class="h-6" >
     <h1 v-if="authRefs.tokens.value['access_token']">Hello, {{ authRefs.user.value['nickname']}}</h1>
     <div class="grid grid-cols-12 h-5/6">
 

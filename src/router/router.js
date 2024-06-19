@@ -1,4 +1,4 @@
-import {createMemoryHistory, createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from "@/views/ChatView.vue";
 import LoginView from "@/views/LoginView.vue";

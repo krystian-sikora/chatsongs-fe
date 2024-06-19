@@ -87,14 +87,14 @@ function scrollToBottom() {
 </script>
 
 <template>
-  <div class="relative">
+  <div class="relative h-[75vh]">
     <h1>Selected chat: {{ props.currentChat.name }}</h1>
-    <ScrollArea ref="scrollAreaRef" class="h-[700px]">
+    <ScrollArea ref="scrollAreaRef" class="h-[90%]">
         <div v-for="message in props.currentChat.messages" ref="contentRef">
           <Message v-bind:message="message" v-bind:authRefs="authRefs" v-bind:contactRefs="contactRefs"></Message>
         </div>
     </ScrollArea>
-    <div class="absolute bottom-[-3.25rem] flex w-full">
+    <div class="absolute bottom-[0vh] flex w-full">
       <Input type="text" v-model="chatInput" class="inline-block w-[100%] mx-2"></Input>
       <Button class="inline-block" @click="sendMessage()">Send</Button>
     </div>

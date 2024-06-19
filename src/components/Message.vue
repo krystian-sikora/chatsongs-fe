@@ -1,7 +1,7 @@
 <script setup>
 
 import { Avatar } from "@/components/ui/avatar/index.js";
-import { computed, onMounted, onUpdated, ref, watch } from "vue";
+import { computed, onMounted, onUpdated, ref } from "vue";
 import { useContactStore } from "@/store/contactStore.js";
 import { storeToRefs } from "pinia";
 
