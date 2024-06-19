@@ -87,7 +87,7 @@ function scrollToBottom() {
 </script>
 
 <template>
-  <div class="relative h-[75vh]">
+  <div class="relative">
     <h1>Selected chat: {{ props.currentChat.name }}</h1>
     <ScrollArea ref="scrollAreaRef" class="h-[90%]">
         <div v-for="message in props.currentChat.messages" ref="contentRef">

@@ -94,8 +94,8 @@ function viewChat(chat) {
       </ScrollArea>
 
       <div class="col-span-8 p-6 border rounded-md mx-5">
-        <CreateChat v-if="isCreatingNewChat" v-bind:currentChat="currentChat" v-bind:isCreatingNewChat="isCreatingNewChat"></CreateChat>
-        <Chat v-else-if="props.id && currentChat" v-bind:currentChat="currentChat"></Chat>
+        <CreateChat class="h-[75vh]" v-if="isCreatingNewChat" v-bind:currentChat="currentChat" v-bind:isCreatingNewChat="isCreatingNewChat"></CreateChat>
+        <Chat class="h-[75vh]" v-else-if="props.id && currentChat" v-bind:currentChat="currentChat"></Chat>
       </div>
     </div>
   </div>

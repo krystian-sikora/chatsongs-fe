@@ -57,17 +57,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex mb-2">
-    <Input placeholder="Search" v-model="searchInput" class="inline-block mr-3"></Input>
-    <Button class="inline-block" @click="create()">Create chat</Button>
-  </div>
-  <div v-for="contact in filteredContacts" class="p-2">
-    <Checkbox class="mx-2 gray" @click="checkboxClick(contact['id'])" :checked="isChecked(contact['id'])">
-    </Checkbox>
-    <Avatar class="mx-2">
-      {{ contact['nickname'].substring(0,1)}}
-    </Avatar>
-    <span>{{ contact['nickname'] }}</span>
+  <div>
+    <div class="flex mb-2">
+      <Input placeholder="Search" v-model="searchInput" class="inline-block mr-3"></Input>
+      <Button class="inline-block" @click="create()">Create chat</Button>
+    </div>
+    <div v-for="contact in filteredContacts" class="p-2">
+      <Checkbox class="mx-2 gray" @click="checkboxClick(contact['id'])" :checked="isChecked(contact['id'])">
+      </Checkbox>
+      <Avatar class="mx-2">
+        {{ contact['nickname'].substring(0,1)}}
+      </Avatar>
+      <span>{{ contact['nickname'] }}</span>
+    </div>
   </div>
 </template>
 
