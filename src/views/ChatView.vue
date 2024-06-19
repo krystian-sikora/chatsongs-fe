@@ -3,18 +3,15 @@
 import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
 import { useChatStore } from "@/store/chatStore.js";
-import {computed, nextTick, onMounted, onUnmounted, onUpdated, ref, watch} from "vue";
+import { computed, onMounted, onUpdated, ref, watch } from "vue";
 import ChatPreview from "@/components/ChatPreview.vue";
 import { Button } from "@/components/ui/button/index.js";
 import Chat from "@/components/Chat.vue";
-import { Stomp } from "@stomp/stompjs";
 import { ScrollArea } from "@/components/ui/scroll-area/index.js";
 import CreateChat from "@/components/CreateChat.vue";
 import router from "@/router/router.js";
 
 const props = defineProps(['id'])
-
-const apiUrl = import.meta.env.VITE_API_URL;
 
 const authStore = useAuthStore()
 const authRefs = storeToRefs(authStore)
@@ -31,25 +28,44 @@ const chats = computed(() => {
 const currentChat = ref(chatRefs.chats.value[0])
 const isCreatingNewChat = ref(false)
 
+function loadChat() {
+  if (props.id) {
+    watch(
+        () => chatStore.chats,
+        (newChats) => {
+          if (newChats.length > 0) {
+            currentChat.value = chatRefs.chats.value.find(c => c.id === Number(props.id))
+          }
+        }
+    )
+    return
+  }
+
+  if (chatStore.chats.length !== 0) {
+    router.push(`chat/${chatStore.chats[0].id}`)
+    return
+  }
+
+  watch(
+      () => chatStore.chats,
+      (newChats) => {
+        if (newChats.length > 0) {
+          router.push(`chat/${newChats[0].id}`)
+        }
+      }
+  )
+}
+
 onMounted(() => {
   if (!token) return
 
   chatStore.getChats(token)
 
-  if (!props.id) {
-    watch(
-        () => chatStore.chats,
-        (newChats) => {
-          if (newChats.length > 0) {
-            router.push(`chat/${newChats[0].id}`)
-          }
-        }
-    )
-  }
+  loadChat()
 })
 
 onUpdated(() => {
-  currentChat.value = chatRefs.chats.value.find(c => c.id === Number(props.id))
+  loadChat()
 })
 
 function createDummyChat() {

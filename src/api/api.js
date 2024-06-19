@@ -50,7 +50,7 @@ export async function refresh(token) {
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'localhost:8080/api/auth/refresh',
+        url: apiUrl + '/auth/refresh',
         headers: {
             'Authorization': `Bearer ${token}`
         }

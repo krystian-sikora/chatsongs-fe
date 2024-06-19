@@ -24,12 +24,20 @@ export default router
 
 router.beforeEach(async (to) => {
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/login', '/register'];
-    const authRequired = !publicPages.includes(to.path);
-    const auth = useAuthStore();
+    const publicPages = ['/login', '/register']
+    const authRequired = !publicPages.includes(to.path)
+    const auth = useAuthStore()
+    let loggedIn
 
-    if (authRequired && !auth.user) {
-        auth.returnUrl = to.fullPath;
-        return '/login';
+    if (!auth.user) loggedIn = auth.isAuthenticated()
+    else loggedIn = true
+
+    if (authRequired && loggedIn === false) {
+        auth.returnUrl = to.fullPath
+        return '/login'
+    }
+
+    if (!authRequired && loggedIn === true) {
+        return '/chat'
     }
 });

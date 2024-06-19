@@ -4,6 +4,9 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu'
+import {useAuthStore} from "@/store/authStore.js";
+
+const authStore = useAuthStore()
 </script>
 
 <template>
@@ -23,6 +26,7 @@ import {
       </NavigationMenuItem>
     </NavigationMenuList>
   </NavigationMenu>
+  <Button @click="authStore.logout()">Sign out</Button>
   <main>
     <RouterView />
   </main>

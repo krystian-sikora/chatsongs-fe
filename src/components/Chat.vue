@@ -2,14 +2,14 @@
 
 import { Input } from '@/components/ui/input'
 import { Button } from "@/components/ui/button/index.js";
-import {nextTick, onMounted, onUnmounted, onUpdated, ref, watch} from "vue";
+import { nextTick, onMounted, onUnmounted, onUpdated, ref, watch } from "vue";
 import Message from "@/components/Message.vue";
-import {ScrollArea} from "@/components/ui/scroll-area/index.js";
-import {useAuthStore} from "@/store/authStore.js";
-import {storeToRefs} from "pinia";
-import {useContactStore} from "@/store/contactStore.js";
-import {Stomp} from "@stomp/stompjs";
-import {useChatStore} from "@/store/chatStore.js";
+import { ScrollArea } from "@/components/ui/scroll-area/index.js";
+import { useAuthStore } from "@/store/authStore.js";
+import { storeToRefs } from "pinia";
+import { useContactStore } from "@/store/contactStore.js";
+import { Stomp } from "@stomp/stompjs";
+import { useChatStore } from "@/store/chatStore.js";
 
 const props = defineProps(['currentChat'])
 
