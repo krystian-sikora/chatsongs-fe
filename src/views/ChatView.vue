@@ -29,6 +29,11 @@ const currentChat = ref(chatRefs.chats.value[0])
 const isCreatingNewChat = ref(false)
 
 function loadChat() {
+  if (props.id && chatRefs.chats.value.length !== 0) {
+    currentChat.value = chatRefs.chats.value.find(c => c.id === Number(props.id))
+    return
+  }
+
   if (props.id) {
     watch(
         () => chatStore.chats,
@@ -79,6 +84,11 @@ function viewChat(chat) {
   router.push({ path: `/chat/${chat.id}` })
 }
 
+function updateIsCreatingNewChat(bool) {
+  isCreatingNewChat.value = bool
+  loadChat()
+}
+
 </script>
 
 <template>
@@ -94,8 +104,12 @@ function viewChat(chat) {
       </ScrollArea>
 
       <div class="col-span-8 p-6 border rounded-md mx-5">
-        <CreateChat class="h-[75vh]" v-if="isCreatingNewChat" v-bind:currentChat="currentChat" v-bind:isCreatingNewChat="isCreatingNewChat"></CreateChat>
-        <Chat class="h-[75vh]" v-else-if="props.id && currentChat" v-bind:currentChat="currentChat"></Chat>
+        <CreateChat class="h-[75vh]" v-if="isCreatingNewChat"
+                    :currentChat="currentChat"
+                    :isCreatingNewChat="isCreatingNewChat"
+                    @update:isCreatingNewChat="updateIsCreatingNewChat">
+        </CreateChat>
+        <Chat class="h-[75vh]" v-else-if="props.id && currentChat" :currentChat="currentChat"></Chat>
       </div>
     </div>
   </div>

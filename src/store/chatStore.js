@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from "vue";
-import {createChat, getChats} from "@/api/api.js";
+import { createChat, getChats } from "@/api/api.js";
 import router from '@/router/router.js'
 
 export const useChatStore = defineStore('chats', {

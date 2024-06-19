@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { useChatStore } from "@/store/chatStore.js";
 
 const props = defineProps(['currentChat', 'isCreatingNewChat'])
+const emit = defineEmits(['update:isCreatingNewChat'])
 
 const authStore = useAuthStore()
 const authRefs = storeToRefs(authStore)
@@ -44,10 +45,8 @@ function isChecked(contactId) {
 }
 
 function create() {
-  let c = chatStore.createChat(token, toInvite.value)
-
-  props.isCreatingNewChat = false
-  props.currentChat = chat['id']
+  emit('update:isCreatingNewChat', false)
+  chatStore.createChat(token, toInvite.value)
 }
 
 onMounted(() => {
