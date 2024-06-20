@@ -96,7 +96,7 @@ function scrollToBottom() {
         <p class="text-gray-400 text-center m-auto absolute bottom-20 w-full"> Looks like this chat has no messages yet! </p>
       </div>
     </ScrollArea>
-    <div class="border-b p-6 absolute top-0  w-full backdrop-blur drop-shadow">
+    <div class="border-b rounded-t p-6 absolute top-0  w-full backdrop-blur drop-shadow">
       <h1>Selected chat: {{ props.currentChat.name }}</h1>
     </div>
     <div class="absolute bottom-[2vh] px-5 flex w-full bg-transparent">

@@ -95,14 +95,16 @@ function updateIsCreatingNewChat(bool) {
   <div class="h-6" >
     <h1 v-if="authRefs.tokens.value['access_token']">Hello, {{ authRefs.user.value['nickname']}}</h1>
     <div class="grid grid-cols-12 h-5/6">
-
-      <ScrollArea class="col-span-3 p-6 border rounded-md mx-5 pt-20">
-        <Button @click="isCreatingNewChat=!isCreatingNewChat" class="absolute top-5">Create new chat</Button>
-        <div v-if="chats" v-for="chat in chatRefs.chats.value" @click="viewChat(chat)" class="cursor-pointer">
-          <ChatPreview :chat="chat" :id="props.id"></ChatPreview>
+      <div class="col-span-3 border rounded-md mx-5 relative">
+        <ScrollArea class="h-[75vh]">
+          <div v-if="chats" v-for="chat in chatRefs.chats.value" @click="viewChat(chat)" class="cursor-pointer first:mt-20 pl-2 pr-4">
+            <ChatPreview :chat="chat" :id="props.id"></ChatPreview>
+          </div>
+        </ScrollArea>
+        <div class="absolute top-0 w-full px-6 py-4 border-b rounded-t backdrop-blur drop-shadow">
+          <Button @click="isCreatingNewChat=!isCreatingNewChat">Create new chat</Button>
         </div>
-      </ScrollArea>
-
+      </div>
       <div class="col-span-8 border rounded-md mx-5">
         <CreateChat class="h-[75vh]" v-if="isCreatingNewChat"
                     :currentChat="currentChat"
