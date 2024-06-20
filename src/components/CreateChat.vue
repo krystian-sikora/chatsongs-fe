@@ -56,7 +56,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="p-6">
     <div class="flex mb-2">
       <Input placeholder="Search" v-model="searchInput" class="inline-block mr-3"></Input>
       <Button class="inline-block" @click="create()">Create chat</Button>

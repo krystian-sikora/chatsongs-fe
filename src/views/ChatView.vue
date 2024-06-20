@@ -10,6 +10,7 @@ import Chat from "@/components/Chat.vue";
 import { ScrollArea } from "@/components/ui/scroll-area/index.js";
 import CreateChat from "@/components/CreateChat.vue";
 import router from "@/router/router.js";
+import { Avatar } from "@/components/ui/avatar/index.js";
 
 const props = defineProps(['id'])
 
@@ -92,10 +93,13 @@ function updateIsCreatingNewChat(bool) {
 </script>
 
 <template>
-  <div class="h-6" >
+  <div>
     <h1 v-if="authRefs.tokens.value['access_token']">Hello, {{ authRefs.user.value['nickname']}}</h1>
-    <div class="grid grid-cols-12 h-5/6">
-      <div class="col-span-3 border rounded-md mx-5 relative">
+    <div class="flex">
+      <div class="flex-none border rounded-md ml-5">
+        <Avatar class="m-2"></Avatar>
+      </div>
+      <div class="flex-initial w-1/6 border rounded-md mx-5 relative">
         <ScrollArea class="h-[75vh]">
           <div v-if="chats" v-for="chat in chatRefs.chats.value" @click="viewChat(chat)" class="cursor-pointer first:mt-20 pl-2 pr-4">
             <ChatPreview :chat="chat" :id="props.id"></ChatPreview>
@@ -105,7 +109,7 @@ function updateIsCreatingNewChat(bool) {
           <Button @click="isCreatingNewChat=!isCreatingNewChat">Create new chat</Button>
         </div>
       </div>
-      <div class="col-span-8 border rounded-md mx-5">
+      <div class="flex-initial w-2/3 border rounded-md mx-5">
         <CreateChat class="h-[75vh]" v-if="isCreatingNewChat"
                     :currentChat="currentChat"
                     :isCreatingNewChat="isCreatingNewChat"
