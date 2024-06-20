@@ -88,15 +88,20 @@ function scrollToBottom() {
 
 <template>
   <div class="relative">
-    <h1>Selected chat: {{ props.currentChat.name }}</h1>
-    <ScrollArea ref="scrollAreaRef" class="h-[90%]">
-        <div v-for="message in props.currentChat.messages" ref="contentRef">
-          <Message v-bind:message="message" v-bind:authRefs="authRefs" v-bind:contactRefs="contactRefs"></Message>
-        </div>
+    <ScrollArea ref="scrollAreaRef" class="h-[100%] px-6">
+      <div v-for="message in props.currentChat.messages" ref="contentRef" class="first:pt-20 last:pb-16">
+        <Message v-bind:message="message" v-bind:authRefs="authRefs" v-bind:contactRefs="contactRefs"></Message>
+      </div>
+      <div v-if="props.currentChat.messages.length === 0">
+        <p class="text-gray-400 text-center m-auto absolute bottom-20 w-full"> Looks like this chat has no messages yet! </p>
+      </div>
     </ScrollArea>
-    <div class="absolute bottom-[0vh] flex w-full">
-      <Input type="text" v-model="chatInput" class="inline-block w-[100%] mx-2"></Input>
-      <Button class="inline-block" @click="sendMessage()">Send</Button>
+    <div class="border-b p-6 absolute top-0  w-full backdrop-blur drop-shadow">
+      <h1>Selected chat: {{ props.currentChat.name }}</h1>
+    </div>
+    <div class="absolute bottom-[2vh] px-5 flex w-full bg-transparent">
+      <Input type="text" v-model="chatInput" class="inline-block w-[100%] mx-2 drop-shadow"></Input>
+      <Button class="inline-block drop-shadow" @click="sendMessage()">Send</Button>
     </div>
   </div>
 </template>

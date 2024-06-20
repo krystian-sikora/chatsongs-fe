@@ -103,7 +103,7 @@ function updateIsCreatingNewChat(bool) {
         </div>
       </ScrollArea>
 
-      <div class="col-span-8 p-6 border rounded-md mx-5">
+      <div class="col-span-8 border rounded-md mx-5">
         <CreateChat class="h-[75vh]" v-if="isCreatingNewChat"
                     :currentChat="currentChat"
                     :isCreatingNewChat="isCreatingNewChat"

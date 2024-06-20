@@ -9,9 +9,9 @@ const isCurrentChat = computed(() => Number(props.id) === props.chat.id)
 </script>
 
 <template>
-  <div :class="isCurrentChat ? 'rounded-md bg-gray-200' : ''">
+  <div :class="isCurrentChat ? 'rounded-md bg-gray-200 drop-shadow' : ''">
     <div class="inline-block">
-      <Avatar class="my-2 mx-2">
+      <Avatar class="my-2 mx-2 drop-shadow">
         <!--      <AvatarImage src="https://github.com/radix-vue.png" alt="@radix-vue" />-->
         <!--      <AvatarFallback>CN</AvatarFallback>-->
         {{ props.chat.name.substring(0,1) }}
