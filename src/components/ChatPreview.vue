@@ -1,31 +1,30 @@
 <script setup>
 import { Avatar } from "@/components/ui/avatar/index.js";
-import { computed, onUpdated } from "vue";
+import {computed, onUpdated, ref, watch} from "vue";
 import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
 
-const props = defineProps(['id', 'chat', 'isCurrentChat', 'contactRefs'])
+const props = defineProps(['id', 'chat', 'isCurrentChat', 'contactRefs', 'lastMsg'])
 
 const authStore = useAuthStore()
 const authRefs = storeToRefs(authStore)
 
-const messagePreview = constructMsgPreview()
+const messagePreview = ref(constructMsgPreview())
 
 function constructMsgPreview() {
   if (props.chat.messages.length === 0) return ''
 
-  let msg = props.chat.messages[props.chat.messages.length -1]
-  let msgContent = msg.content
-  let isUserMessage = msg.senderId === authRefs.user.value.id
+  let msgContent = props.lastMsg.content
+  let isUserMessage = props.lastMsg.senderId === authRefs.user.value.id
 
   if (isUserMessage) return `You: ${msgContent}`
 
-  let sender = computed(() => props.contactRefs.contacts.value.find(c => c.id === msg.senderId)).value.nickname
+  let sender = computed(() => props.contactRefs.contacts.value.find(c => c.id === props.lastMsg.senderId)).value.nickname
   return `${sender}: ${msgContent}`
 }
 
 onUpdated(() => {
-  console.log(props.id)
+  messagePreview.value = constructMsgPreview()
 })
 
 </script>

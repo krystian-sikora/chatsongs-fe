@@ -42,7 +42,7 @@ function isCurrentChat(chatId) {
   <ScrollArea class="h-[75vh]">
     <div v-if="chats" v-for="chat in chatRefs.chats.value"
          @click="viewChat(chat)" class="cursor-pointer first:mt-20 pl-2 pr-4">
-      <ChatPreview :chat="chat" :contactRefs="contactRefs"
+      <ChatPreview :chat="chat" :contactRefs="contactRefs" :lastMsg="chat.messages[chat.messages.length - 1]"
                    :isCurrentChat="isCurrentChat(chat.id)"></ChatPreview>
     </div>
   </ScrollArea>

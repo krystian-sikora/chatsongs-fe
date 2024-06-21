@@ -22,7 +22,6 @@ const chatStore = useChatStore()
 const chatRefs = storeToRefs(chatStore)
 
 const contactStore = useContactStore()
-const contactRefs = storeToRefs(contactStore)
 
 const currentChat = ref(chatRefs.chats.value[0])
 const isCreatingNewChat = ref(false)
