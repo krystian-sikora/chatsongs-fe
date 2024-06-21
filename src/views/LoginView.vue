@@ -37,7 +37,7 @@ const onSubmit = form.handleSubmit((values) => {
 
 watch(authRefs.tokens, async (tokens) => {
   if (tokens['access_token'] && tokens['refresh_token']) {
-    await router.push('/')
+    await router.push({ path: `/chat`})
   } else {
     console.warn('no tokens detected')
   }

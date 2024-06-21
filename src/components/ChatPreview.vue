@@ -1,8 +1,28 @@
 <script setup>
 import { Avatar } from "@/components/ui/avatar/index.js";
-import { onUpdated } from "vue";
+import { computed, onUpdated } from "vue";
+import { useAuthStore } from "@/store/authStore.js";
+import { storeToRefs } from "pinia";
 
-const props = defineProps(['id', 'chat', 'isCurrentChat'])
+const props = defineProps(['id', 'chat', 'isCurrentChat', 'contactRefs'])
+
+const authStore = useAuthStore()
+const authRefs = storeToRefs(authStore)
+
+const messagePreview = constructMsgPreview()
+
+function constructMsgPreview() {
+  if (props.chat.messages.length === 0) return ''
+
+  let msg = props.chat.messages[props.chat.messages.length -1]
+  let msgContent = msg.content
+  let isUserMessage = msg.senderId === authRefs.user.value.id
+
+  if (isUserMessage) return `You: ${msgContent}`
+
+  let sender = computed(() => props.contactRefs.contacts.value.find(c => c.id === msg.senderId)).value.nickname
+  return `${sender}: ${msgContent}`
+}
 
 onUpdated(() => {
   console.log(props.id)
@@ -22,6 +42,7 @@ onUpdated(() => {
     </div>
     <div class="inline-block contain-inline-size w-[calc(100%-56px)] my-auto align-middle pr-2">
       <p class="truncate"> {{ props.chat.name }} </p>
+      <p class="truncate text-gray-500"> {{ messagePreview }}</p>
     </div>
   </div>
 </template>

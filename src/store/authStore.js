@@ -17,10 +17,8 @@ export const useAuthStore = defineStore('auth', {
             )
         },
         logout() {
-            this.user = null
-            this.tokens = null
             localStorage.clear()
-            router.push({path: '/'})
+            router.push({path: '/login'})
         },
         register(email, username, password) {
             register(email, username, password).then(

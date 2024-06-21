@@ -7,12 +7,16 @@ import { useChatStore } from "@/store/chatStore.js";
 import { storeToRefs } from "pinia";
 import router from "@/router/router.js";
 import { computed } from "vue";
+import { useContactStore } from "@/store/contactStore.js";
 
 const props = defineProps(['id', 'isCreatingNewChat', 'currentChat'])
 const emit = defineEmits(['update:isCreatingNewChat', 'update:currentChat'])
 
 const chatStore = useChatStore()
 const chatRefs = storeToRefs(chatStore)
+
+const contactStore = useContactStore()
+const contactRefs = storeToRefs(contactStore)
 
 const chats = computed(() => {
   return !!chatRefs.chats.value;
@@ -38,7 +42,8 @@ function isCurrentChat(chatId) {
   <ScrollArea class="h-[75vh]">
     <div v-if="chats" v-for="chat in chatRefs.chats.value"
          @click="viewChat(chat)" class="cursor-pointer first:mt-20 pl-2 pr-4">
-      <ChatPreview :chat="chat" :isCurrentChat="isCurrentChat(chat.id)"></ChatPreview>
+      <ChatPreview :chat="chat" :contactRefs="contactRefs"
+                   :isCurrentChat="isCurrentChat(chat.id)"></ChatPreview>
     </div>
   </ScrollArea>
   <div class="absolute top-0 w-full border-b rounded-t backdrop-blur drop-shadow h-16 flex justify-center flex-col">

@@ -9,6 +9,7 @@ import CreateChat from "@/components/CreateChat.vue";
 import router from "@/router/router.js";
 import IconChats from "@/components/icons/IconChats.vue";
 import ChatPreviewsArea from "@/components/ChatPreviewsArea.vue";
+import { useContactStore } from "@/store/contactStore.js";
 
 const props = defineProps(['id'])
 
@@ -19,6 +20,9 @@ const token = authRefs.tokens.value['access_token']
 
 const chatStore = useChatStore()
 const chatRefs = storeToRefs(chatStore)
+
+const contactStore = useContactStore()
+const contactRefs = storeToRefs(contactStore)
 
 const currentChat = ref(chatRefs.chats.value[0])
 const isCreatingNewChat = ref(false)
@@ -60,6 +64,7 @@ onMounted(() => {
   if (!token) return
 
   chatStore.getChats(token)
+  contactStore.getContacts(token)
 
   loadChat()
 })

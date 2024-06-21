@@ -17,6 +17,10 @@ export const useChatStore = defineStore('chats', {
                 }
             )
         },
+        getLatest() {
+            // TODO: implement a way to get the latest chat
+            return this.chats[0]
+        },
         createChat(token, users) {
             createChat(token, users).then(
                 (res) => {
