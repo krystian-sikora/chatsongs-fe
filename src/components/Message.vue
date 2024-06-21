@@ -2,15 +2,11 @@
 
 import { Avatar } from "@/components/ui/avatar/index.js";
 import { computed, onMounted, onUpdated, ref } from "vue";
-import { useContactStore } from "@/store/contactStore.js";
-import { storeToRefs } from "pinia";
 
 const props = defineProps(['message', 'authRefs', 'contactRefs'])
 
 const senderId = ref()
 const userId = ref()
-
-const contactStore = useContactStore()
 
 const isUserMessage = computed(() => props.message.senderId === props.authRefs.user.value.id)
 

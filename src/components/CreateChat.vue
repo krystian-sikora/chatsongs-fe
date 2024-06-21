@@ -9,6 +9,7 @@ import { Avatar } from "@/components/ui/avatar/index.js";
 import { Checkbox } from "@/components/ui/checkbox/index.js";
 import { Button } from '@/components/ui/button'
 import { useChatStore } from "@/store/chatStore.js";
+import Badge from "@/components/ui/badge/Badge.vue";
 
 const props = defineProps(['currentChat', 'isCreatingNewChat'])
 const emit = defineEmits(['update:isCreatingNewChat'])
@@ -52,6 +53,11 @@ onMounted(() => {
   contactStore.getContacts(token)
 })
 
+function deleteInvite(id) {
+  let index = toInvite.value.indexOf(id)
+  toInvite.value.splice(index, 1)
+}
+
 </script>
 
 <template>
@@ -60,6 +66,11 @@ onMounted(() => {
       <Input placeholder="Search" v-model="searchInput" class="inline-block mr-3"></Input>
       <Button class="inline-block" @click="create()">Create chat</Button>
     </div>
+    <Badge v-for="id in toInvite" class="mr-1">
+      <p>{{ contactRefs.contacts.value.find(c => c.id === id).nickname }}
+        <a class="cursor-pointer font-light" @click="deleteInvite(id);"> X </a>
+      </p>
+    </Badge>
     <div v-for="contact in filteredContacts" class="p-2">
       <Checkbox class="mx-2 gray" @click="checkboxClick(contact['id'])" :checked="isChecked(contact['id'])">
       </Checkbox>
