@@ -18,7 +18,6 @@ const authRefs = storeToRefs(authStore)
 const token = authRefs.tokens.value['access_token']
 
 const chatStore = useChatStore()
-const chatRefs = storeToRefs(chatStore)
 
 const contactStore = useContactStore()
 const contactRefs = storeToRefs(contactStore)

@@ -11,7 +11,6 @@ const senderId = ref()
 const userId = ref()
 
 const contactStore = useContactStore()
-const contactRefs = storeToRefs(contactStore)
 
 const isUserMessage = computed(() => props.message.senderId === props.authRefs.user.value.id)
 
@@ -28,11 +27,6 @@ onUpdated(() => {
 async function evalMessage() {
   senderId.value = props.message.senderId
   userId.value = props.authRefs.user.value.id
-  // if (isUserMessage.value) return
-  // sender.value = props.contactRefs.contacts.value.find(c => c.id === senderId.value)
-  // console.log(props.contactRefs.contacts.value)
-  // console.log('sender: ', sender.value)
-  // console.log(`Evaluating message: ${props.message.content}\nWith sender id: ${senderId.value}\nisUserMessage: ${isUserMessage.value}`)
 }
 
 </script>

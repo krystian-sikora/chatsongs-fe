@@ -1,15 +1,17 @@
 <script setup>
 import { Avatar } from "@/components/ui/avatar/index.js";
-import { computed } from "vue";
+import { onUpdated } from "vue";
 
-const props = defineProps(['chat', 'id'])
+const props = defineProps(['id', 'chat', 'isCurrentChat'])
 
-const isCurrentChat = computed(() => Number(props.id) === props.chat.id)
+onUpdated(() => {
+  console.log(props.id)
+})
 
 </script>
 
 <template>
-  <div :class="isCurrentChat ? 'rounded-md bg-gray-200 drop-shadow' : ''"
+  <div :class="props.isCurrentChat ? 'rounded-md bg-gray-200 drop-shadow' : ''"
        class="hover:rounded-md hover:bg-gray-200 hover:drop-shadow mb-1">
     <div class="inline-block">
       <Avatar class="my-2 mx-2 drop-shadow">

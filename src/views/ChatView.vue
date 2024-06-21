@@ -3,14 +3,12 @@
 import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
 import { useChatStore } from "@/store/chatStore.js";
-import { computed, onMounted, onUpdated, ref, watch } from "vue";
-import ChatPreview from "@/components/ChatPreview.vue";
+import { onMounted, onUpdated, ref, watch } from "vue";
 import Chat from "@/components/Chat.vue";
-import { ScrollArea } from "@/components/ui/scroll-area/index.js";
 import CreateChat from "@/components/CreateChat.vue";
 import router from "@/router/router.js";
 import IconChats from "@/components/icons/IconChats.vue";
-import IconNewChat from "@/components/icons/IconNewChat.vue";
+import ChatPreviewsArea from "@/components/ChatPreviewsArea.vue";
 
 const props = defineProps(['id'])
 
@@ -21,10 +19,6 @@ const token = authRefs.tokens.value['access_token']
 
 const chatStore = useChatStore()
 const chatRefs = storeToRefs(chatStore)
-
-const chats = computed(() => {
-  return !!chatRefs.chats.value;
-})
 
 const currentChat = ref(chatRefs.chats.value[0])
 const isCreatingNewChat = ref(false)
@@ -74,20 +68,13 @@ onUpdated(() => {
   loadChat()
 })
 
-function createDummyChat() {
-  const id = authRefs.user.value['id']
-  chatStore.createChat(token, [id, id+1])
-}
-
-function viewChat(chat) {
-  isCreatingNewChat.value = false
-  currentChat.value = chat
-  router.push({ path: `/chat/${chat.id}` })
-}
-
 function updateIsCreatingNewChat(bool) {
   isCreatingNewChat.value = bool
   loadChat()
+}
+
+function updateCurrentChat(id) {
+  currentChat.value = chatRefs.chats.value.find(c => c.id === id)
 }
 
 </script>
@@ -100,18 +87,10 @@ function updateIsCreatingNewChat(bool) {
         <IconChats class="w-10 m-2"></IconChats>
       </div>
       <div class="flex-initial w-1/6 border rounded-md relative">
-        <ScrollArea class="h-[75vh]">
-          <div v-if="chats" v-for="chat in chatRefs.chats.value"
-               @click="viewChat(chat)" class="cursor-pointer first:mt-20 pl-2 pr-4">
-            <ChatPreview :chat="chat" :id="props.id"></ChatPreview>
-          </div>
-        </ScrollArea>
-        <div class="absolute top-0 w-full border-b rounded-t backdrop-blur drop-shadow h-16 flex justify-center flex-col">
-          <div class="*:inline-block">
-            <IconNewChat @click="isCreatingNewChat=!isCreatingNewChat"
-                         class="w-8 m-2 float-end cursor-pointer"></IconNewChat>
-          </div>
-        </div>
+        <ChatPreviewsArea :isCreatingNewChat="isCreatingNewChat" :currentChat="currentChat" :id="props.id"
+                          @update:isCreatingNewChat="updateIsCreatingNewChat"
+                          @update:currentChat="updateCurrentChat">
+        </ChatPreviewsArea>
       </div>
       <div class="flex-initial w-[1200px] border rounded-md">
         <CreateChat class="h-[75vh]" v-if="isCreatingNewChat"
