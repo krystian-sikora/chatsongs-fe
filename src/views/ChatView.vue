@@ -5,12 +5,12 @@ import { storeToRefs } from "pinia";
 import { useChatStore } from "@/store/chatStore.js";
 import { computed, onMounted, onUpdated, ref, watch } from "vue";
 import ChatPreview from "@/components/ChatPreview.vue";
-import { Button } from "@/components/ui/button/index.js";
 import Chat from "@/components/Chat.vue";
 import { ScrollArea } from "@/components/ui/scroll-area/index.js";
 import CreateChat from "@/components/CreateChat.vue";
 import router from "@/router/router.js";
-import { Avatar } from "@/components/ui/avatar/index.js";
+import IconChats from "@/components/icons/IconChats.vue";
+import IconNewChat from "@/components/icons/IconNewChat.vue";
 
 const props = defineProps(['id'])
 
@@ -95,21 +95,25 @@ function updateIsCreatingNewChat(bool) {
 <template>
   <div>
     <h1 v-if="authRefs.tokens.value['access_token']">Hello, {{ authRefs.user.value['nickname']}}</h1>
-    <div class="flex">
-      <div class="flex-none border rounded-md ml-5">
-        <Avatar class="m-2"></Avatar>
+    <div class="flex *:ml-3 last:mr-3">
+      <div class="flex-none border rounded-md ">
+        <IconChats class="w-10 m-2"></IconChats>
       </div>
-      <div class="flex-initial w-1/6 border rounded-md mx-5 relative">
+      <div class="flex-initial w-1/6 border rounded-md relative">
         <ScrollArea class="h-[75vh]">
-          <div v-if="chats" v-for="chat in chatRefs.chats.value" @click="viewChat(chat)" class="cursor-pointer first:mt-20 pl-2 pr-4">
+          <div v-if="chats" v-for="chat in chatRefs.chats.value"
+               @click="viewChat(chat)" class="cursor-pointer first:mt-20 pl-2 pr-4">
             <ChatPreview :chat="chat" :id="props.id"></ChatPreview>
           </div>
         </ScrollArea>
-        <div class="absolute top-0 w-full px-6 py-4 border-b rounded-t backdrop-blur drop-shadow">
-          <Button @click="isCreatingNewChat=!isCreatingNewChat">Create new chat</Button>
+        <div class="absolute top-0 w-full border-b rounded-t backdrop-blur drop-shadow h-16 flex justify-center flex-col">
+          <div class="*:inline-block">
+            <IconNewChat @click="isCreatingNewChat=!isCreatingNewChat"
+                         class="w-8 m-2 float-end cursor-pointer"></IconNewChat>
+          </div>
         </div>
       </div>
-      <div class="flex-initial w-2/3 border rounded-md mx-5">
+      <div class="flex-initial w-[1200px] border rounded-md">
         <CreateChat class="h-[75vh]" v-if="isCreatingNewChat"
                     :currentChat="currentChat"
                     :isCreatingNewChat="isCreatingNewChat"
@@ -120,7 +124,3 @@ function updateIsCreatingNewChat(bool) {
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>

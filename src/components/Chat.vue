@@ -10,6 +10,7 @@ import { storeToRefs } from "pinia";
 import { useContactStore } from "@/store/contactStore.js";
 import { Stomp } from "@stomp/stompjs";
 import { useChatStore } from "@/store/chatStore.js";
+import IconThreeDots from "@/components/icons/IconThreeDots.vue";
 
 const props = defineProps(['currentChat'])
 
@@ -96,8 +97,11 @@ function scrollToBottom() {
         <p class="text-gray-400 text-center m-auto absolute bottom-20 w-full"> Looks like this chat has no messages yet! </p>
       </div>
     </ScrollArea>
-    <div class="border-b rounded-t p-6 absolute top-0  w-full backdrop-blur drop-shadow">
-      <h1>Selected chat: {{ props.currentChat.name }}</h1>
+    <div class="border-b rounded-t px-6 h-16 absolute top-0 w-full backdrop-blur drop-shadow flex justify-center flex-col">
+      <div>
+        <h1 class="inline-block">Selected chat: {{ props.currentChat.name }}</h1>
+        <IconThreeDots class="w-6 inline-block float-end"></IconThreeDots>
+      </div>
     </div>
     <div class="absolute bottom-[2vh] px-5 flex w-full bg-transparent">
       <Input type="text" v-model="chatInput" class="inline-block w-[100%] mx-2 drop-shadow"></Input>
@@ -105,7 +109,3 @@ function scrollToBottom() {
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>

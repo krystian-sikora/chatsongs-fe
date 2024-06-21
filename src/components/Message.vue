@@ -60,7 +60,3 @@ async function evalMessage() {
   </div>
   <div class="clear-both"></div>
 </template>
-
-<style scoped>
-
-</style>
