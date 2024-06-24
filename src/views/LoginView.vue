@@ -37,7 +37,7 @@ const onSubmit = form.handleSubmit((values) => {
 
 watch(authRefs.tokens, async (tokens) => {
   if (tokens['access_token'] && tokens['refresh_token']) {
-    await router.push({ path: `/chat`})
+    await router.push({ path: `/chat` })
   } else {
     console.warn('no tokens detected')
   }
@@ -51,29 +51,31 @@ watch(authRefs.tokens, async (tokens) => {
       <FormItem>
         <FormLabel>Email</FormLabel>
         <FormControl>
-          <Input type="text" placeholder="example@email.com" v-bind="componentField" />
+          <Input placeholder="example@email.com" type="text" v-bind="componentField"/>
         </FormControl>
         <FormDescription>
           This is your email.
         </FormDescription>
-        <FormMessage />
+        <FormMessage/>
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="password">
       <FormItem>
         <FormLabel>Password</FormLabel>
         <FormControl>
-          <Input type="password" v-bind="componentField" />
+          <Input type="password" v-bind="componentField"/>
         </FormControl>
         <FormDescription>
           This is your password.
         </FormDescription>
-        <FormMessage />
+        <FormMessage/>
       </FormItem>
     </FormField>
-    <Button type="submit" class="w-full">
+    <Button class="w-full" type="submit">
       Submit
     </Button>
-    <p class="text-gray-400 text-center m-auto">Don't have an account? <RouterLink to="/register">Click here.</RouterLink></p>
+    <p class="text-gray-400 text-center m-auto">Don't have an account?
+      <RouterLink to="/register">Click here.</RouterLink>
+    </p>
   </form>
 </template>

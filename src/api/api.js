@@ -18,7 +18,7 @@ export async function register(email, username, password) {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
         },
-        data : data
+        data: data
     };
 
     return axios.request(config)
@@ -39,7 +39,7 @@ export async function login(email, password) {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
         },
-        data : data
+        data: data
     };
 
     return axios.request(config)
@@ -52,7 +52,7 @@ export async function refresh(token) {
         maxBodyLength: Infinity,
         url: apiUrl + '/auth/refresh',
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${ token }`
         }
     };
 
@@ -66,7 +66,7 @@ export async function getChats(token) {
         maxBodyLength: Infinity,
         url: apiUrl + '/chat',
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${ token }`
         }
     };
 
@@ -82,24 +82,24 @@ export async function createChat(token, users) {
         url: apiUrl + '/chat',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${ token }`
         },
-        data : users
+        data: users
     };
 
     return axios.request(config)
 }
 
-export async function addContact(token, userId){
+export async function addContact(token, userId) {
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
         url: apiUrl + '/contact',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${ token }`
         },
-        data : userId
+        data: userId
     };
 
     return axios.request(config)
@@ -112,7 +112,7 @@ export async function getContacts(token) {
         url: apiUrl + '/contact',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${ token }`
         }
     };
 

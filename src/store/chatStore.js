@@ -26,7 +26,7 @@ export const useChatStore = defineStore('chats', {
                 (res) => {
                     console.log(res)
                     this.chats.push(res.data)
-                    router.push({ path: `/chat/${res.data.id}` })
+                    router.push({ path: `/chat/${ res.data.id }` })
                 }
             )
         }

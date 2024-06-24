@@ -14,10 +14,10 @@ const props = defineProps({
 
 <template>
   <Primitive
-    :as="as"
-    :as-child="asChild"
-    :class="cn(buttonVariants({ variant, size }), props.class)"
+      :as="as"
+      :as-child="asChild"
+      :class="cn(buttonVariants({ variant, size }), props.class)"
   >
-    <slot />
+    <slot/>
   </Primitive>
 </template>

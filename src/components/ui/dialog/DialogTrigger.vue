@@ -9,6 +9,6 @@ const props = defineProps({
 
 <template>
   <DialogTrigger v-bind="props">
-    <slot />
+    <slot/>
   </DialogTrigger>
 </template>

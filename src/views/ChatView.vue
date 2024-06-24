@@ -45,7 +45,7 @@ function loadChat() {
   }
 
   if (chatStore.chats.length !== 0) {
-    router.push(`chat/${chatStore.chats[0].id}`)
+    router.push(`chat/${ chatStore.chats[0].id }`)
     return
   }
 
@@ -53,7 +53,7 @@ function loadChat() {
       () => chatStore.chats,
       (newChats) => {
         if (newChats.length > 0) {
-          router.push(`chat/${newChats[0].id}`)
+          router.push(`chat/${ newChats[0].id }`)
         }
       }
   )
@@ -85,24 +85,24 @@ function updateCurrentChat(id) {
 
 <template>
   <div>
-    <h1 v-if="authRefs.tokens.value['access_token']">Hello, {{ authRefs.user.value['nickname']}}</h1>
+    <h1 v-if="authRefs.tokens.value['access_token']">Hello, {{ authRefs.user.value['nickname'] }}</h1>
     <div class="flex *:ml-3 last:mr-3">
       <div class="flex-none border rounded-md ">
         <IconChats class="w-10 m-2"></IconChats>
       </div>
       <div class="flex-initial w-1/6 border rounded-md relative">
-        <ChatPreviewsArea :isCreatingNewChat="isCreatingNewChat" :currentChat="currentChat" :id="props.id"
+        <ChatPreviewsArea :id="props.id" :currentChat="currentChat" :isCreatingNewChat="isCreatingNewChat"
                           @update:isCreatingNewChat="updateIsCreatingNewChat"
                           @update:currentChat="updateCurrentChat">
         </ChatPreviewsArea>
       </div>
       <div class="flex-initial w-[1200px] border rounded-md">
-        <CreateChat class="h-[75vh]" v-if="isCreatingNewChat"
-                    :currentChat="currentChat"
+        <CreateChat v-if="isCreatingNewChat" :currentChat="currentChat"
                     :isCreatingNewChat="isCreatingNewChat"
+                    class="h-[75vh]"
                     @update:isCreatingNewChat="updateIsCreatingNewChat">
         </CreateChat>
-        <Chat class="h-[75vh]" v-else-if="props.id && currentChat" :currentChat="currentChat"></Chat>
+        <Chat v-else-if="props.id && currentChat" :currentChat="currentChat" class="h-[75vh]"></Chat>
       </div>
     </div>
   </div>

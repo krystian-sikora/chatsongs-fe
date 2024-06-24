@@ -18,7 +18,8 @@ const authRefs = storeToRefs(authStore)
 const token = authRefs.tokens.value['access_token']
 
 function addContact() {
-  if (contactId.value === undefined) {}
+  if (contactId.value === undefined) {
+  }
   contactStore.addContact(token, contactId.value)
   contactId.value = null
 }
@@ -30,7 +31,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Input type="number" v-model="contactId" class="w-96"></Input>
+  <Input v-model="contactId" class="w-96" type="number"></Input>
   <Button @click="addContact()">add contact</Button>
   <ul>
     <li v-for="contact in contactRefs.contacts.value">

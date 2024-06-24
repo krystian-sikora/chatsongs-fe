@@ -19,14 +19,14 @@ const delegatedProps = computed(() => {
 
 <template>
   <Label
-    v-bind="delegatedProps"
-    :class="
+      :class="
       cn(
         'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
         props.class,
       )
     "
+      v-bind="delegatedProps"
   >
-    <slot />
+    <slot/>
   </Label>
 </template>

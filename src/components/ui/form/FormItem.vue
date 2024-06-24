@@ -14,6 +14,6 @@ provide(FORM_ITEM_INJECTION_KEY, id);
 
 <template>
   <div :class="cn('space-y-2', props.class)">
-    <slot />
+    <slot/>
   </div>
 </template>

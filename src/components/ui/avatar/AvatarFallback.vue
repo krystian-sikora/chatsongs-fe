@@ -10,6 +10,6 @@ const props = defineProps({
 
 <template>
   <AvatarFallback v-bind="props">
-    <slot />
+    <slot/>
   </AvatarFallback>
 </template>

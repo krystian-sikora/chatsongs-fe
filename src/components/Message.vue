@@ -29,16 +29,18 @@ async function evalMessage() {
 
 <template>
   <div v-if="isUserMessage" class="float-right">
-    <h1 class="inline-block border rounded-md my-2 p-2 max-w-[calc(100%-112px)] ml-[56px]"> {{ props.message.content }} </h1>
+    <h1 class="inline-block border rounded-md my-2 p-2 max-w-[calc(100%-112px)] ml-[56px]"> {{
+        props.message.content
+      }} </h1>
     <div class="inline-block float-right">
       <Avatar class="my-2 mx-2 flex drop-shadow">
-        {{ props.authRefs.user.value.nickname.substring(0,1) }}
+        {{ props.authRefs.user.value.nickname.substring(0, 1) }}
       </Avatar>
     </div>
   </div>
   <div v-else-if="sender">
     <Avatar class="my-2 mx-2 float-left drop-shadow">
-      {{ sender.nickname.substring(0,1) }}
+      {{ sender.nickname.substring(0, 1) }}
     </Avatar>
     <h1 class="inline-block border rounded-md my-2 p-2 max-w-[calc(100%-112px)]"> {{ props.message.content }} </h1>
   </div>

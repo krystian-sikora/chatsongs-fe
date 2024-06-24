@@ -12,6 +12,6 @@ const props = defineProps({
 
 <template>
   <AvatarRoot :class="cn(avatarVariant({ size, shape }), props.class)">
-    <slot />
+    <slot/>
   </AvatarRoot>
 </template>

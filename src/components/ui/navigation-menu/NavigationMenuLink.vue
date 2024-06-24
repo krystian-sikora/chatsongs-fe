@@ -13,6 +13,6 @@ const forwarded = useForwardPropsEmits(props, emits);
 
 <template>
   <NavigationMenuLink v-bind="forwarded">
-    <slot />
+    <slot/>
   </NavigationMenuLink>
 </template>

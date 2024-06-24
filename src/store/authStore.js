@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('auth', {
         },
         logout() {
             localStorage.clear()
-            router.push({path: '/login'})
+            router.push({ path: '/login' })
         },
         register(email, username, password) {
             register(email, username, password).then(

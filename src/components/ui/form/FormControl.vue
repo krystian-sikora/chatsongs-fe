@@ -7,12 +7,12 @@ const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
 
 <template>
   <Slot
-    :id="formItemId"
-    :aria-describedby="
+      :id="formItemId"
+      :aria-describedby="
       !error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`
     "
-    :aria-invalid="!!error"
+      :aria-invalid="!!error"
   >
-    <slot />
+    <slot/>
   </Slot>
 </template>

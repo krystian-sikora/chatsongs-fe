@@ -1,6 +1,6 @@
 <script setup>
 import { Avatar } from "@/components/ui/avatar/index.js";
-import {computed, onUpdated, ref, watch} from "vue";
+import { computed, onUpdated, ref } from "vue";
 import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
 
@@ -17,10 +17,10 @@ function constructMsgPreview() {
   let msgContent = props.lastMsg.content
   let isUserMessage = props.lastMsg.senderId === authRefs.user.value.id
 
-  if (isUserMessage) return `You: ${msgContent}`
+  if (isUserMessage) return `You: ${ msgContent }`
 
   let sender = computed(() => props.contactRefs.contacts.value.find(c => c.id === props.lastMsg.senderId)).value.nickname
-  return `${sender}: ${msgContent}`
+  return `${ sender }: ${ msgContent }`
 }
 
 onUpdated(() => {
@@ -36,7 +36,7 @@ onUpdated(() => {
       <Avatar class="my-2 mx-2 drop-shadow">
         <!--      <AvatarImage src="https://github.com/radix-vue.png" alt="@radix-vue" />-->
         <!--      <AvatarFallback>CN</AvatarFallback>-->
-        {{ props.chat.name.substring(0,1) }}
+        {{ props.chat.name.substring(0, 1) }}
       </Avatar>
     </div>
     <div class="inline-block contain-inline-size w-[calc(100%-56px)] my-auto align-middle pr-2">

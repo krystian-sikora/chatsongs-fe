@@ -10,6 +10,6 @@ const props = defineProps({
 
 <template>
   <NavigationMenuItem v-bind="props">
-    <slot />
+    <slot/>
   </NavigationMenuItem>
 </template>

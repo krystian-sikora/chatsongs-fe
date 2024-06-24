@@ -33,7 +33,7 @@ const form = useForm({
 
 const onSubmit = form.handleSubmit((values) => {
   console.log('Form submitted!', values)
-  authStore.register(values.email ,values.username, values.password)
+  authStore.register(values.email, values.username, values.password)
 })
 
 watch(authRefs.tokens, async (tokens) => {
@@ -52,41 +52,43 @@ watch(authRefs.tokens, async (tokens) => {
       <FormItem>
         <FormLabel>Email</FormLabel>
         <FormControl>
-          <Input type="text" placeholder="example@email.com" v-bind="componentField" />
+          <Input placeholder="example@email.com" type="text" v-bind="componentField"/>
         </FormControl>
         <FormDescription>
           This is your email.
         </FormDescription>
-        <FormMessage />
+        <FormMessage/>
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="username">
       <FormItem>
         <FormLabel>Username</FormLabel>
         <FormControl>
-          <Input type="text" placeholder="chatsongs" v-bind="componentField" />
+          <Input placeholder="chatsongs" type="text" v-bind="componentField"/>
         </FormControl>
         <FormDescription>
           This is your public display name.
         </FormDescription>
-        <FormMessage />
+        <FormMessage/>
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="password">
       <FormItem>
         <FormLabel>Password</FormLabel>
         <FormControl>
-          <Input type="password" v-bind="componentField" />
+          <Input type="password" v-bind="componentField"/>
         </FormControl>
         <FormDescription>
           This is your password.
         </FormDescription>
-        <FormMessage />
+        <FormMessage/>
       </FormItem>
     </FormField>
-    <Button type="submit" class="w-full">
+    <Button class="w-full" type="submit">
       Submit
     </Button>
-    <p class="text-gray-400 text-center m-auto">Already have an account? <RouterLink to="/login">Click here.</RouterLink></p>
+    <p class="text-gray-400 text-center m-auto">Already have an account?
+      <RouterLink to="/login">Click here.</RouterLink>
+    </p>
   </form>
 </template>

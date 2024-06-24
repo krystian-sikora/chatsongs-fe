@@ -23,12 +23,12 @@ const forwardedProps = useForwardProps(delegatedProps);
 
 <template>
   <TagsInputInput
-    v-bind="forwardedProps"
-    :class="
+      :class="
       cn(
         'text-sm min-h-6 focus:outline-none flex-1 bg-transparent px-1',
         props.class,
       )
     "
+      v-bind="forwardedProps"
   />
 </template>

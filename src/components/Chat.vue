@@ -11,6 +11,7 @@ import { useContactStore } from "@/store/contactStore.js";
 import { Stomp } from "@stomp/stompjs";
 import { useChatStore } from "@/store/chatStore.js";
 import IconThreeDots from "@/components/icons/IconThreeDots.vue";
+import IconMusicNote from "@/components/icons/IconMusicNote.vue";
 
 const props = defineProps(['currentChat'])
 
@@ -26,21 +27,24 @@ const contactRefs = storeToRefs(contactStore)
 
 const chatInput = ref('')
 const contentRef = ref(null)
+const scrollAreaRef = ref(null)
 
 let stompClient = null
 
 function initWebSocketConnection() {
   let socket = new SockJS('http://localhost:8080/chat');
   stompClient = Stomp.over(socket);
-  stompClient.connect({'Authorization': `Bearer ${token}`}, function(frame) {
+  stompClient.connect({ 'Authorization': `Bearer ${ token }` }, function (frame) {
     console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/messages', function(messageOutput) {
+    stompClient.subscribe('/topic/messages', function (messageOutput) {
       console.log(messageOutput.body)
     });
-    stompClient.subscribe(`/user/${authRefs.user.value['id']}/queue/messages`, (message) => {
+    stompClient.subscribe(`/user/${ authRefs.user.value['id'] }/queue/messages`, (message) => {
       // console.log(`Received direct msg: ${message.body}`)
       let json = JSON.parse(message.body)
       chatRefs.chats.value.find(c => c['id'] === json['chatId']).messages.push(json)
+
+      if (getPercentScrolled() !== 1) return
       scrollToBottom()
     });
   });
@@ -50,10 +54,10 @@ function sendMessage() {
   stompClient.publish({
     destination: "/app/chat",
     body:
-      `{
-        "chat_id": ${props.currentChat.id},
-        "content": "${chatInput.value}"
-      }`
+        `{
+          "chat_id": ${ props.currentChat.id },
+          "content": "${ chatInput.value }"
+        }`
   })
   chatInput.value = ''
 }
@@ -69,6 +73,7 @@ onUnmounted(() => {
 })
 
 onUpdated(() => {
+  if (getPercentScrolled() !== 1) return
   scrollToBottom()
 })
 
@@ -77,11 +82,21 @@ watch(
     () => scrollToBottom()
 )
 
+function getPercentScrolled() {
+  if (props.currentChat.messages.length === 0) return 1
+  const scrollAreaElement = contentRef.value[contentRef.value.length - 1].parentElement.parentElement
+  const scrollTop = scrollAreaElement.scrollTop
+  const offsetHeight = scrollAreaElement.scrollHeight - scrollAreaElement.offsetHeight
+
+  return scrollTop / offsetHeight
+}
+
 function scrollToBottom() {
   if (props.currentChat.messages.length === 0) return
   nextTick(() => {
     if (contentRef.value === null) return
-    contentRef.value[contentRef.value.length - 1].scrollIntoView(false)
+    const latestMessage = contentRef.value[contentRef.value.length - 1];
+    latestMessage.scrollIntoView(false)
   })
 }
 
@@ -91,20 +106,25 @@ function scrollToBottom() {
   <div class="relative">
     <ScrollArea ref="scrollAreaRef" class="h-[100%] px-6">
       <div v-for="message in props.currentChat.messages" ref="contentRef" class="first:pt-20 last:pb-16">
-        <Message v-bind:message="message" v-bind:authRefs="authRefs" v-bind:contactRefs="contactRefs"></Message>
+        <Message :authRefs="authRefs" :contactRefs="contactRefs" :message="message"></Message>
       </div>
       <div v-if="props.currentChat.messages.length === 0">
-        <p class="text-gray-400 text-center m-auto absolute bottom-20 w-full"> Looks like this chat has no messages yet! </p>
+        <p class="text-gray-400 text-center m-auto absolute bottom-20 w-full"> Looks like this chat has no messages
+          yet! </p>
       </div>
     </ScrollArea>
-    <div class="border-b rounded-t px-6 h-16 absolute top-0 w-full backdrop-blur drop-shadow flex justify-center flex-col">
+    <div
+        class="border-b rounded-t px-6 h-16 absolute top-0 w-full backdrop-blur drop-shadow flex justify-center flex-col">
       <div>
         <h1 class="inline-block">Selected chat: {{ props.currentChat.name }}</h1>
-        <IconThreeDots class="w-6 inline-block float-end"></IconThreeDots>
+        <div class="*:inline-block *:w-6 *:ml-5 float-end">
+          <IconMusicNote></IconMusicNote>
+          <IconThreeDots></IconThreeDots>
+        </div>
       </div>
     </div>
     <div class="absolute bottom-[2vh] px-5 flex w-full bg-transparent">
-      <Input type="text" v-model="chatInput" class="inline-block w-[100%] mx-2 drop-shadow"></Input>
+      <Input v-model="chatInput" class="inline-block w-[100%] mx-2 drop-shadow" type="text"></Input>
       <Button class="inline-block drop-shadow" @click="sendMessage()">Send</Button>
     </div>
   </div>

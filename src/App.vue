@@ -7,6 +7,6 @@ const authStore = useAuthStore()
 <template>
   <Button @click="authStore.logout()">Sign out</Button>
   <main>
-    <RouterView />
+    <RouterView/>
   </main>
 </template>

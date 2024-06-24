@@ -1,10 +1,6 @@
 <script setup>
 import { computed } from "vue";
-import {
-  ScrollAreaCorner,
-  ScrollAreaRoot,
-  ScrollAreaViewport,
-} from "radix-vue";
+import { ScrollAreaCorner, ScrollAreaRoot, ScrollAreaViewport, } from "radix-vue";
 import ScrollBar from "./ScrollBar.vue";
 import { cn } from "@/lib/utils";
 
@@ -26,13 +22,13 @@ const delegatedProps = computed(() => {
 
 <template>
   <ScrollAreaRoot
-    v-bind="delegatedProps"
-    :class="cn('relative overflow-hidden', props.class)"
+      :class="cn('relative overflow-hidden', props.class)"
+      v-bind="delegatedProps"
   >
     <ScrollAreaViewport class="h-full w-full rounded-[inherit]">
-      <slot />
+      <slot/>
     </ScrollAreaViewport>
-    <ScrollBar />
-    <ScrollAreaCorner />
+    <ScrollBar/>
+    <ScrollAreaCorner/>
   </ScrollAreaRoot>
 </template>

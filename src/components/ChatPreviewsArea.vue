@@ -25,7 +25,7 @@ const chats = computed(() => {
 function viewChat(chat) {
   emit('update:isCreatingNewChat', false)
   emit('update:currentChat', chat.id)
-  router.push({ path: `/chat/${chat.id}` })
+  router.push({ path: `/chat/${ chat.id }` })
 }
 
 function toggleChat() {
@@ -40,16 +40,16 @@ function isCurrentChat(chatId) {
 
 <template>
   <ScrollArea class="h-[75vh]">
-    <div v-if="chats" v-for="chat in chatRefs.chats.value"
-         @click="viewChat(chat)" class="cursor-pointer first:mt-20 pl-2 pr-4">
-      <ChatPreview :chat="chat" :contactRefs="contactRefs" :lastMsg="chat.messages[chat.messages.length - 1]"
-                   :isCurrentChat="isCurrentChat(chat.id)"></ChatPreview>
+    <div v-for="chat in chatRefs.chats.value" v-if="chats"
+         class="cursor-pointer first:mt-20 pl-2 pr-4" @click="viewChat(chat)">
+      <ChatPreview :chat="chat" :contactRefs="contactRefs" :isCurrentChat="isCurrentChat(chat.id)"
+                   :lastMsg="chat.messages[chat.messages.length - 1]"></ChatPreview>
     </div>
   </ScrollArea>
   <div class="absolute top-0 w-full border-b rounded-t backdrop-blur drop-shadow h-16 flex justify-center flex-col">
     <div class="*:inline-block">
-      <IconNewChat @click="toggleChat();"
-                   class="w-8 m-2 float-end cursor-pointer"></IconNewChat>
+      <IconNewChat class="w-8 m-2 float-end cursor-pointer"
+                   @click="toggleChat();"></IconNewChat>
     </div>
   </div>
 </template>
