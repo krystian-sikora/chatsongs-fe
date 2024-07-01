@@ -12,6 +12,15 @@ import { Stomp } from "@stomp/stompjs";
 import { useChatStore } from "@/store/chatStore.js";
 import IconThreeDots from "@/components/icons/IconThreeDots.vue";
 import IconMusicNote from "@/components/icons/IconMusicNote.vue";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from "@/components/ui/sheet/index.js";
+import { spotifyLogin } from "@/api/api.js";
+import { useSpotifyStore } from "@/store/spotifyStore.js";
 
 const props = defineProps(['currentChat'])
 
@@ -24,6 +33,9 @@ const chatRefs = storeToRefs(chatStore)
 
 const contactStore = useContactStore()
 const contactRefs = storeToRefs(contactStore)
+
+const spotifyStore = useSpotifyStore()
+const spotifyRefs = storeToRefs(spotifyStore)
 
 const chatInput = ref('')
 const contentRef = ref(null)
@@ -100,10 +112,20 @@ function scrollToBottom() {
   })
 }
 
+function spotifyLoginRedirect() {
+  spotifyLogin(authRefs.tokens.value['access_token']).then((response) => {
+    console.log(response)
+    window.location = response.data
+  }).catch((error) => {
+    console.error(error)
+  })
+}
+
 </script>
 
 <template>
   <div class="relative">
+    <Sheet>
     <ScrollArea ref="scrollAreaRef" class="h-[100%] px-6">
       <div v-for="message in props.currentChat.messages" ref="contentRef" class="first:pt-20 last:pb-16">
         <Message :authRefs="authRefs" :contactRefs="contactRefs" :message="message"></Message>
@@ -118,7 +140,9 @@ function scrollToBottom() {
       <div>
         <h1 class="inline-block">Selected chat: {{ props.currentChat.name }}</h1>
         <div class="*:inline-block *:w-6 *:ml-5 float-end">
-          <IconMusicNote></IconMusicNote>
+          <SheetTrigger as-child>
+            <IconMusicNote></IconMusicNote>
+          </SheetTrigger>
           <IconThreeDots></IconThreeDots>
         </div>
       </div>
@@ -127,5 +151,13 @@ function scrollToBottom() {
       <Input v-model="chatInput" class="inline-block w-[100%] mx-2 drop-shadow" type="text"></Input>
       <Button class="inline-block drop-shadow" @click="sendMessage()">Send</Button>
     </div>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Spotify</SheetTitle>
+        </SheetHeader>
+        <Button v-if="spotifyRefs.isLoggedIn.value === false" @click="spotifyLoginRedirect()">login to spotify</Button>
+        <h1 v-else>You are logged in!</h1>
+      </SheetContent>
+    </Sheet>
   </div>
 </template>

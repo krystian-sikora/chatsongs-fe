@@ -118,3 +118,60 @@ export async function getContacts(token) {
 
     return axios.request(config)
 }
+
+export async function spotifyLogin(token) {
+    let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/spotify/login',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ token }`
+        }
+    };
+
+    return axios.request(config)
+}
+
+export async function spotifyCallback(token, query) {
+    let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/spotify/callback' + `?code=${ query.code }&state=${ query.state }`,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ token }`
+        },
+        query: query
+    };
+
+    return axios.request(config)
+}
+
+export async function getSpotifyCredentials(token) {
+    let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/spotify/credentials',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ token }`
+        }
+    };
+
+    return axios.request(config)
+}
+
+export async function refreshSpotifyCredentials(token) {
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/spotify/refresh',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ token }`
+        }
+    };
+
+    return axios.request(config)
+}

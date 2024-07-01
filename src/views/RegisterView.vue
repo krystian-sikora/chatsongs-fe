@@ -88,7 +88,7 @@ watch(authRefs.tokens, async (tokens) => {
       Submit
     </Button>
     <p class="text-gray-400 text-center m-auto">Already have an account?
-      <RouterLink to="/login">Click here.</RouterLink>
+      <RouterLink to="/login" class="hover:underline underline-offset-4">Click here.</RouterLink>
     </p>
   </form>
 </template>
