@@ -1,6 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref } from "vue";
-import { joinPlayback, refreshSpotifyCredentials, setPlaybackDevice, startResume } from "@/api/api.js";
+import {
+    getPlayback,
+    joinPlayback,
+    playbackAction,
+    refreshSpotifyCredentials,
+    setPlaybackDevice,
+    startResume
+} from "@/api/api.js";
 
 export const usePlaybackStore = defineStore('playback', {
     state: () => {
@@ -13,7 +20,14 @@ export const usePlaybackStore = defineStore('playback', {
             device: ref({
                 'device_id': null,
                 'is_active': false
-            })
+            }),
+            playback: ref({
+                'chat_id': null,
+                'session_id': null,
+                'users': [],
+            }),
+            playbacks: ref(new Map()),
+            currentPlayback: ref(null)
         }
     },
     actions: {
@@ -53,7 +67,11 @@ export const usePlaybackStore = defineStore('playback', {
             joinPlayback(token, chatId)
                 .then(
                     (res) => {
+                        this.playback = res.data
+                        this.playbacks.set(chatId, res.data)
+                        this.currentPlayback = res.data
                         console.log('joined playback', res.data)
+                        console.log(this.playbacks)
                     })
                 .catch(
                     (res) => {
@@ -69,6 +87,30 @@ export const usePlaybackStore = defineStore('playback', {
                 .catch(
                     (res) => {
                         console.warn('could not start/resume playback', res)
+                    })
+        },
+        getPlayback(token, chatId) {
+            getPlayback(token, chatId)
+                .then(
+                    (res) => {
+                        this.playbacks.set(chatId, res.data)
+                        console.log('got playback', res.data)
+                        console.log(this.playbacks)
+                    })
+                .catch(
+                    (res) => {
+                        console.warn('could not get playback', res.response.status)
+                    })
+        },
+        action(token, chatId, action) {
+            playbackAction(token, chatId, action)
+                .then(
+                    (res) => {
+                        console.log('playback action', action, res.data)
+                    })
+                .catch(
+                    (res) => {
+                        console.warn('could not perform action', action, res)
                     })
         }
     },

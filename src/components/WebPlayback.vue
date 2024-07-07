@@ -2,19 +2,25 @@
 
 import { onMounted, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
+import { Button } from "@/components/ui/button/index.js";
 
-const props = defineProps(['spotifyStore'])
+const props = defineProps(['playbackStore', 'authToken', 'chatId'])
 
-const script = document.createElement('script')
-script.src = 'https://sdk.scdn.co/spotify-player.js'
-script.async = true
-document.body.appendChild(script)
-
-const { tokens, device } = storeToRefs(props.spotifyStore)
+const { tokens, device, playbacks, currentPlayback } = storeToRefs(props.playbackStore)
 
 const playerS = ref(null)
 
 onMounted(() => {
+  props.playbackStore.getPlayback(props.authToken, props.chatId)
+  loadScript()
+})
+
+function loadScript() {
+  const script = document.createElement('script')
+  script.src = 'https://sdk.scdn.co/spotify-player.js'
+  script.async = true
+  document.body.appendChild(script)
+
   window.onSpotifyWebPlaybackSDKReady = () => {
     if (!tokens.value['access_token']) {
       // console.log('no token, watching for changes', tokens.value)
@@ -29,7 +35,7 @@ onMounted(() => {
       initPlayer()
     }
   }
-})
+}
 
 function initPlayer() {
   if (device.value['is_active'] === true) return
@@ -41,14 +47,12 @@ function initPlayer() {
   });
 
   player.addListener('ready', ({ device_id }) => {
-    device.value['device_id'] = device_id
-    device.value['is_active'] = true
+    props.playbackStore.setDevice(props.authToken, device_id, true)
     console.log('Ready with Device ID', device_id);
   });
 
   player.addListener('not_ready', ({ device_id }) => {
-    device.value['device_id'] = device_id
-    device.value['is_active'] = false
+    props.playbackStore.setDevice(props.authToken, device_id, false)
     console.log('Device ID has gone offline', device_id);
   });
 
@@ -57,12 +61,25 @@ function initPlayer() {
   playerS.value = player
 }
 
+function joinSession() {
+  props.playbackStore.join(props.authToken, props.chatId)
+}
 
 </script>
 
 <template>
   <div>
-    <h1>Web Playback</h1>
+    <div v-if="playbacks.get(chatId)">
+      <div v-if="currentPlayback && currentPlayback.chat_id === chatId">
+        {{ currentPlayback }}
+      </div>
+      <div v-else>
+        <Button @click="joinSession">Join session</Button>
+      </div>
+    </div>
+    <div v-else>
+      <Button @click="joinSession">Create session</Button>
+    </div>
   </div>
 </template>
 

@@ -22,6 +22,9 @@ import {
 import { spotifyLogin } from "@/api/api.js";
 import { usePlaybackStore } from "@/store/playbackStore.js";
 import WebPlayback from "@/components/WebPlayback.vue";
+import IconPreviousSong from "@/components/icons/IconPreviousSong.vue";
+import IconPauseSong from "@/components/icons/IconPauseSong.vue";
+import IconResumeSong from "@/components/icons/IconResumeSong.vue";
 
 const props = defineProps(['currentChat'])
 
@@ -35,8 +38,8 @@ const chatRefs = storeToRefs(chatStore)
 const contactStore = useContactStore()
 const contactRefs = storeToRefs(contactStore)
 
-const spotifyStore = usePlaybackStore()
-const spotifyRefs = storeToRefs(spotifyStore)
+const playbackStore = usePlaybackStore()
+const playbackRefs = storeToRefs(playbackStore)
 
 const chatInput = ref('')
 const contentRef = ref(null)
@@ -78,7 +81,7 @@ function sendMessage() {
 onMounted(() => {
   scrollToBottom()
   contactStore.getContacts(token)
-  spotifyStore.refresh(authRefs.tokens.value['access_token'])
+  playbackStore.refresh(authRefs.tokens.value['access_token'])
   initWebSocketConnection()
 })
 
@@ -123,6 +126,14 @@ function spotifyLoginRedirect() {
   })
 }
 
+function isCurrentPlayback() {
+  return playbackRefs.currentPlayback.value && playbackRefs.currentPlayback.value.chat_id === props.currentChat.id
+}
+
+function resumeSong() {
+  playbackStore.startResume(token, props.currentChat.id)
+}
+
 </script>
 
 <template>
@@ -142,7 +153,11 @@ function spotifyLoginRedirect() {
         class="border-b rounded-t px-6 h-16 absolute top-0 w-full backdrop-blur drop-shadow flex justify-center flex-col">
       <div>
         <h1 class="inline-block">Selected chat: {{ props.currentChat.name }}</h1>
-        <div class="*:inline-block *:w-6 *:ml-5 float-end">
+        <div class="*:inline-block *:w-6 *:ml-5 *:hover:cursor-pointer float-end">
+          <IconPreviousSong v-if="isCurrentPlayback()" @click="playbackStore.action(token, props.currentChat.id, 'PREVIOUS')"/>
+          <IconPauseSong v-if="isCurrentPlayback()" @click="playbackStore.action(token, props.currentChat.id, 'PAUSE')"/>
+          <IconResumeSong v-if="isCurrentPlayback()" @click="playbackStore.action(token, props.currentChat.id, 'PLAY')"/>
+          <IconPreviousSong v-if="isCurrentPlayback()" @click="playbackStore.action(token, props.currentChat.id, 'NEXT')" class="rotate-180"/>
           <SheetTrigger as-child>
             <IconMusicNote/>
           </SheetTrigger>
@@ -158,10 +173,10 @@ function spotifyLoginRedirect() {
         <SheetHeader>
           <SheetTitle>Spotify</SheetTitle>
         </SheetHeader>
-        <Button v-if="spotifyRefs.isLoggedIn.value === false" @click="spotifyLoginRedirect()">login to spotify</Button>
+        <Button v-if="playbackRefs.isLoggedIn.value === false" @click="spotifyLoginRedirect()">login to spotify</Button>
         <div v-else>
           You are logged in!
-          <WebPlayback :spotifyStore="spotifyStore"/>
+          <WebPlayback :playbackStore="playbackStore" :authToken="token" :chatId="props.currentChat.id"/>
         </div>
       </SheetContent>
     </Sheet>

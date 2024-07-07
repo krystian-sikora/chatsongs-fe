@@ -225,12 +225,28 @@ export async function getPlayback(token, chatId) {
     let config = {
         method: 'get',
         maxBodyLength: Infinity,
+        url: apiUrl + '/playback/' + chatId,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ token }`
+        }
+    };
+
+    return axios.request(config)
+}
+
+export async function playbackAction(token, chatId, action) {
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
         url: apiUrl + '/playback',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${ token }`
         },
-        data: chatId
+        data: { 'chat_id': chatId,
+            'action': action,
+        }
     };
 
     return axios.request(config)
