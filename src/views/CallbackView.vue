@@ -6,12 +6,12 @@ import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
 import { spotifyCallback } from "@/api/api.js";
 import { Button } from "@/components/ui/button/index.js";
-import { useSpotifyStore } from "@/store/spotifyStore.js";
+import { usePlaybackStore } from "@/store/playbackStore.js";
 
 const authStore = useAuthStore()
 const authRefs = storeToRefs(authStore)
 
-const spotifyStore = useSpotifyStore()
+const spotifyStore = usePlaybackStore()
 
 const token = authRefs.tokens.value['access_token']
 

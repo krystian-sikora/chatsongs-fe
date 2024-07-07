@@ -20,7 +20,8 @@ import {
   SheetTrigger
 } from "@/components/ui/sheet/index.js";
 import { spotifyLogin } from "@/api/api.js";
-import { useSpotifyStore } from "@/store/spotifyStore.js";
+import { usePlaybackStore } from "@/store/playbackStore.js";
+import WebPlayback from "@/components/WebPlayback.vue";
 
 const props = defineProps(['currentChat'])
 
@@ -34,7 +35,7 @@ const chatRefs = storeToRefs(chatStore)
 const contactStore = useContactStore()
 const contactRefs = storeToRefs(contactStore)
 
-const spotifyStore = useSpotifyStore()
+const spotifyStore = usePlaybackStore()
 const spotifyRefs = storeToRefs(spotifyStore)
 
 const chatInput = ref('')
@@ -77,6 +78,7 @@ function sendMessage() {
 onMounted(() => {
   scrollToBottom()
   contactStore.getContacts(token)
+  spotifyStore.refresh(authRefs.tokens.value['access_token'])
   initWebSocketConnection()
 })
 
@@ -128,11 +130,12 @@ function spotifyLoginRedirect() {
     <Sheet>
     <ScrollArea ref="scrollAreaRef" class="h-[100%] px-6">
       <div v-for="message in props.currentChat.messages" ref="contentRef" class="first:pt-20 last:pb-16">
-        <Message :authRefs="authRefs" :contactRefs="contactRefs" :message="message"></Message>
+        <Message :authRefs="authRefs" :contactRefs="contactRefs" :message="message"/>
       </div>
       <div v-if="props.currentChat.messages.length === 0">
-        <p class="text-gray-400 text-center m-auto absolute bottom-20 w-full"> Looks like this chat has no messages
-          yet! </p>
+        <p class="text-gray-400 text-center m-auto absolute bottom-20 w-full">
+          Looks like this chat has no messages yet!
+        </p>
       </div>
     </ScrollArea>
     <div
@@ -141,14 +144,14 @@ function spotifyLoginRedirect() {
         <h1 class="inline-block">Selected chat: {{ props.currentChat.name }}</h1>
         <div class="*:inline-block *:w-6 *:ml-5 float-end">
           <SheetTrigger as-child>
-            <IconMusicNote></IconMusicNote>
+            <IconMusicNote/>
           </SheetTrigger>
-          <IconThreeDots></IconThreeDots>
+          <IconThreeDots/>
         </div>
       </div>
     </div>
     <div class="absolute bottom-[2vh] px-5 flex w-full bg-transparent">
-      <Input v-model="chatInput" class="inline-block w-[100%] mx-2 drop-shadow" type="text"></Input>
+      <Input v-model="chatInput" class="inline-block w-[100%] mx-2 drop-shadow" type="text"/>
       <Button class="inline-block drop-shadow" @click="sendMessage()">Send</Button>
     </div>
       <SheetContent>
@@ -156,7 +159,10 @@ function spotifyLoginRedirect() {
           <SheetTitle>Spotify</SheetTitle>
         </SheetHeader>
         <Button v-if="spotifyRefs.isLoggedIn.value === false" @click="spotifyLoginRedirect()">login to spotify</Button>
-        <h1 v-else>You are logged in!</h1>
+        <div v-else>
+          You are logged in!
+          <WebPlayback :spotifyStore="spotifyStore"/>
+        </div>
       </SheetContent>
     </Sheet>
   </div>

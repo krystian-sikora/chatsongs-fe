@@ -164,13 +164,73 @@ export async function getSpotifyCredentials(token) {
 
 export async function refreshSpotifyCredentials(token) {
     let config = {
-        method: 'post',
+        method: 'get',
         maxBodyLength: Infinity,
         url: apiUrl + '/spotify/refresh',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${ token }`
         }
+    };
+
+    return axios.request(config)
+}
+
+export async function setPlaybackDevice(token, device) {
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/playback/device',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ token }`
+        },
+        data: device
+    };
+
+    return axios.request(config)
+}
+
+export async function joinPlayback(token, chatId) {
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/playback/join',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ token }`
+        },
+        data: chatId
+    };
+
+    return axios.request(config)
+}
+
+export async function startResume(token, chatId) {
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/playback/start',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ token }`
+        },
+        data: chatId
+    };
+
+    return axios.request(config)
+}
+
+export async function getPlayback(token, chatId) {
+    let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/playback',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ token }`
+        },
+        data: chatId
     };
 
     return axios.request(config)
