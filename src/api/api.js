@@ -206,6 +206,21 @@ export async function joinPlayback(token, chatId) {
     return axios.request(config)
 }
 
+export async function quitPlayback(token, chatId) {
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: apiUrl + '/playback/quit',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ token }`
+        },
+        data: chatId
+    };
+
+    return axios.request(config)
+}
+
 export async function startResume(token, chatId) {
     let config = {
         method: 'post',

@@ -1,14 +1,12 @@
 <script setup>
 
-import { onMounted, ref, watch } from "vue";
+import { onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { Button } from "@/components/ui/button/index.js";
 
 const props = defineProps(['playbackStore', 'authToken', 'chatId'])
 
 const { tokens, device, playbacks, currentPlayback } = storeToRefs(props.playbackStore)
-
-const playerS = ref(null)
 
 onMounted(() => {
   props.playbackStore.getPlayback(props.authToken, props.chatId)
@@ -56,9 +54,21 @@ function initPlayer() {
     console.log('Device ID has gone offline', device_id);
   });
 
+  player.addListener('player_state_changed', ({position, duration, track_window: { current_track } }) => {
+    console.log('Currently Playing', current_track);
+    console.log('Position in Song', position);
+    console.log('Duration of Song', duration);
+  });
+
   player.connect();
 
-  playerS.value = player
+  watch(() => currentPlayback.value, (newPlayback) => {
+    console.log('changed', newPlayback)
+    if (!newPlayback) {
+      player.pause()
+      console.log('paused')
+    }
+  })
 }
 
 function joinSession() {
@@ -71,7 +81,7 @@ function joinSession() {
   <div>
     <div v-if="playbacks.get(chatId)">
       <div v-if="currentPlayback && currentPlayback.chat_id === chatId">
-        {{ currentPlayback }}
+        <Button @click="playbackStore.quit(props.authToken, props.chatId)">Quit session</Button>
       </div>
       <div v-else>
         <Button @click="joinSession">Join session</Button>

@@ -3,10 +3,9 @@ import { ref } from "vue";
 import {
     getPlayback,
     joinPlayback,
-    playbackAction,
+    playbackAction, quitPlayback,
     refreshSpotifyCredentials,
     setPlaybackDevice,
-    startResume
 } from "@/api/api.js";
 
 export const usePlaybackStore = defineStore('playback', {
@@ -20,11 +19,6 @@ export const usePlaybackStore = defineStore('playback', {
             device: ref({
                 'device_id': null,
                 'is_active': false
-            }),
-            playback: ref({
-                'chat_id': null,
-                'session_id': null,
-                'users': [],
             }),
             playbacks: ref(new Map()),
             currentPlayback: ref(null)
@@ -67,7 +61,6 @@ export const usePlaybackStore = defineStore('playback', {
             joinPlayback(token, chatId)
                 .then(
                     (res) => {
-                        this.playback = res.data
                         this.playbacks.set(chatId, res.data)
                         this.currentPlayback = res.data
                         console.log('joined playback', res.data)
@@ -75,18 +68,22 @@ export const usePlaybackStore = defineStore('playback', {
                     })
                 .catch(
                     (res) => {
+                        this.handleError(res, token)
                         console.warn('could not join playback', res)
                     })
         },
-        startResume(token, chatId) {
-            startResume(token, chatId)
+        quit(token, chatId) {
+            quitPlayback(token, chatId)
                 .then(
                     (res) => {
-                        console.log('started/resumed playback', res.data)
+                        this.currentPlayback = null
+                        this.playbacks.set(chatId, null)
+                        console.log('quit playback', res.data)
                     })
                 .catch(
                     (res) => {
-                        console.warn('could not start/resume playback', res)
+                        this.handleError(res)
+                        console.warn('could not quit playback', res)
                     })
         },
         getPlayback(token, chatId) {
@@ -110,8 +107,14 @@ export const usePlaybackStore = defineStore('playback', {
                     })
                 .catch(
                     (res) => {
+                        this.handleError(res)
                         console.warn('could not perform action', action, res)
                     })
+        },
+        handleError(res, token) {
+            if (res.response.status === 401) {
+                this.refresh(token)
+            }
         }
     },
 })

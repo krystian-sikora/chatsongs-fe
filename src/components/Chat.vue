@@ -130,10 +130,6 @@ function isCurrentPlayback() {
   return playbackRefs.currentPlayback.value && playbackRefs.currentPlayback.value.chat_id === props.currentChat.id
 }
 
-function resumeSong() {
-  playbackStore.startResume(token, props.currentChat.id)
-}
-
 </script>
 
 <template>
