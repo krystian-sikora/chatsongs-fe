@@ -34,8 +34,6 @@ onUpdated(() => {
        class="hover:rounded-md hover:bg-gray-200 hover:drop-shadow mb-1">
     <div class="inline-block">
       <Avatar class="my-2 mx-2 drop-shadow">
-        <!--      <AvatarImage src="https://github.com/radix-vue.png" alt="@radix-vue" />-->
-        <!--      <AvatarFallback>CN</AvatarFallback>-->
         {{ props.chat.name.substring(0, 1) }}
       </Avatar>
     </div>

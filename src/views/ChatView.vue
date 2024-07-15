@@ -10,6 +10,7 @@ import router from "@/router/router.js";
 import IconChats from "@/components/icons/IconChats.vue";
 import ChatPreviewsArea from "@/components/ChatPreviewsArea.vue";
 import { useContactStore } from "@/store/contactStore.js";
+import IconInviteUser from "@/components/icons/IconInviteUser.vue";
 
 const props = defineProps(['id'])
 
@@ -84,11 +85,12 @@ function updateCurrentChat(id) {
 </script>
 
 <template>
-  <div>
-    <h1 v-if="authRefs.tokens.value['access_token']">Hello, {{ authRefs.user.value['nickname'] }}</h1>
+  <div class="mt-10">
+<!--    <h1 v-if="authRefs.tokens.value['access_token']">Hello, {{ authRefs.user.value['nickname'] }}</h1>-->
     <div class="flex *:ml-3 last:mr-3">
-      <div class="flex-none border rounded-md ">
-        <IconChats class="w-10 m-2"></IconChats>
+      <div class="flex-none border rounded-md *:p-1">
+        <IconChats class="w-10 m-2 rounded-md bg-gray-200 drop-shadow"></IconChats>
+        <IconInviteUser class="w-10 m-2"></IconInviteUser>
       </div>
       <div class="flex-initial w-1/6 border rounded-md relative">
         <ChatPreviewsArea :id="props.id" :currentChat="currentChat" :isCreatingNewChat="isCreatingNewChat"

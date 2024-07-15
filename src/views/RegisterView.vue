@@ -19,7 +19,7 @@ import router from "@/router/router.js";
 import { storeToRefs } from "pinia";
 
 const authStore = useAuthStore()
-const authRefs = storeToRefs(authStore)
+const { tokens } = storeToRefs(authStore)
 
 const formSchema = toTypedSchema(z.object({
   email: z.string().email(),
@@ -36,7 +36,7 @@ const onSubmit = form.handleSubmit((values) => {
   authStore.register(values.email, values.username, values.password)
 })
 
-watch(authRefs.tokens, async (tokens) => {
+watch(tokens, async (tokens) => {
   if (tokens['access_token'] && tokens['refresh_token']) {
     await router.push('/')
   } else {

@@ -28,6 +28,8 @@ import IconResumeSong from "@/components/icons/IconResumeSong.vue";
 
 const props = defineProps(['currentChat'])
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const authStore = useAuthStore()
 const authRefs = storeToRefs(authStore)
 const token = authRefs.tokens.value['access_token']
@@ -48,10 +50,10 @@ const scrollAreaRef = ref(null)
 let stompClient = null
 
 function initWebSocketConnection() {
-  let socket = new SockJS('http://localhost:8080/chat');
-  stompClient = Stomp.over(socket);
+  let socket = new SockJS(apiUrl + '/chat')
+  stompClient = Stomp.over(socket)
   stompClient.connect({ 'Authorization': `Bearer ${ token }` }, function (frame) {
-    console.log('Connected: ' + frame);
+    console.log('Connected: ' + frame)
     stompClient.subscribe('/topic/messages', function (messageOutput) {
       console.log(messageOutput.body)
     });

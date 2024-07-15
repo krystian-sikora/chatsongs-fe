@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomeView from "@/views/ChatView.vue";
+import ChatView from "@/views/ChatView.vue";
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import Contacts from "@/components/Contacts.vue";
@@ -9,8 +9,8 @@ import CallbackView from "@/views/CallbackView.vue";
 
 const routes = [
     { path: '/', redirect: '/chat' },
-    { path: '/chat', component: HomeView },
-    { path: '/chat/:id', component: HomeView, props: true },
+    { path: '/chat', component: ChatView },
+    { path: '/chat/:id', component: ChatView, props: true },
     { path: '/login', component: LoginView },
     { path: '/register', component: RegisterView },
     { path: '/contacts', component: Contacts },

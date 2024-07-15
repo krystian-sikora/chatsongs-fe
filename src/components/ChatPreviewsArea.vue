@@ -48,7 +48,7 @@ function isCurrentChat(chatId) {
   </ScrollArea>
   <div class="absolute top-0 w-full border-b rounded-t backdrop-blur drop-shadow h-16 flex justify-center flex-col">
     <div class="*:inline-block">
-      <IconNewChat class="w-8 m-2 float-end cursor-pointer"
+      <IconNewChat class="w-6 m-2 float-end cursor-pointer"
                    @click="toggleChat();"></IconNewChat>
     </div>
   </div>
