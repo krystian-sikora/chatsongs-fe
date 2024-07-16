@@ -10,6 +10,7 @@ import router from "@/router/router.js";
 import ChatPreviewsArea from "@/components/ChatPreviewsArea.vue";
 import { useContactStore } from "@/store/contactStore.js";
 import SidebarIcons from "@/components/SidebarIcons.vue";
+import DummyChat from "@/components/DummyChat.vue";
 
 const props = defineProps(['id'])
 
@@ -119,6 +120,7 @@ function updateShowChatPreviews(bool) {
         <Chat v-else-if="props.id && currentChat" :currentChat="currentChat"
               @update:showChatPreviews="updateShowChatPreviews">
         </Chat>
+        <DummyChat v-else-if="!props.id" @update:showChatPreviews="updateShowChatPreviews"/>
       </div>
     </div>
   </div>

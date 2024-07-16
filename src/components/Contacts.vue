@@ -56,7 +56,7 @@ watch(newContact, (newVal) => {
 </script>
 
 <template>
-  <div class="container max-w-xl">
+  <div class="container max-w-xl px-0">
     <IconCross class="w-6 m-6" @click="router.push({path: 'chat'})"/>
     <div class="text-center my-12">
       <h1>This is your user code:</h1>

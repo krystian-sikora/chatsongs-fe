@@ -19,8 +19,9 @@ function constructMsgPreview() {
 
   if (isUserMessage) return `You: ${ msgContent }`
 
-  let sender = computed(() => props.contactRefs.contacts.value.find(c => c.id === props.lastMsg.senderId)).value.nickname
-  return `${ sender }: ${ msgContent }`
+  let sender = computed(() => props.contactRefs.contacts.value.find(c => c.id === props.lastMsg.senderId))
+  if (!sender.value) return `Unknown: ${ msgContent }`
+  return `${ sender.value.nickname }: ${ msgContent }`
 }
 
 onUpdated(() => {

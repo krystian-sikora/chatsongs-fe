@@ -9,6 +9,7 @@ import router from "@/router/router.js";
 import { computed } from "vue";
 import { useContactStore } from "@/store/contactStore.js";
 import SidebarIcons from "@/components/SidebarIcons.vue";
+import DummyChatPreview from "@/components/DummyChatPreview.vue";
 
 const props = defineProps(['id', 'isCreatingNewChat', 'currentChat'])
 const emit = defineEmits(['update:isCreatingNewChat', 'update:currentChat', "update:showChatPreviews"])
@@ -63,6 +64,9 @@ function isCurrentChat(chatId) {
          class="cursor-pointer first:mt-20 pl-2 pr-4" @click="viewChat(chat)">
       <ChatPreview :chat="chat" :contactRefs="contactRefs" :isCurrentChat="isCurrentChat(chat.id)"
                    :lastMsg="chat.messages[chat.messages.length - 1]"></ChatPreview>
+    </div>
+    <div v-if="chatRefs.chats.value.length === 0" class="mt-20 first:mt-20 pl-2 pr-4">
+      <DummyChatPreview @click="emit('update:showChatPreviews', false)" class="rounded-md bg-gray-200 drop-shadow"/>
     </div>
   </ScrollArea>
 
