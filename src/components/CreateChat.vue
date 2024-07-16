@@ -11,12 +11,6 @@ import { Button } from '@/components/ui/button'
 import { useChatStore } from "@/store/chatStore.js";
 import Badge from "@/components/ui/badge/Badge.vue";
 import IconBack from "@/components/icons/IconBack.vue";
-import IconPreviousSong from "@/components/icons/IconPreviousSong.vue";
-import IconResumeSong from "@/components/icons/IconResumeSong.vue";
-import IconThreeDots from "@/components/icons/IconThreeDots.vue";
-import IconPauseSong from "@/components/icons/IconPauseSong.vue";
-import IconMusicNote from "@/components/icons/IconMusicNote.vue";
-import { SheetTrigger } from "@/components/ui/sheet/index.js";
 
 const props = defineProps(['currentChat', 'isCreatingNewChat'])
 const emit = defineEmits(['update:isCreatingNewChat', 'update:showChatPreviews'])
@@ -81,7 +75,7 @@ function updateShowChatPreviews() {
 <!--        <Button class="inline-block" @click="create()">Create chat</Button>-->
       </div>
     </div>
-    <div class="*:px-2">
+    <div class="*:mx-2">
       <div class="flex my-4">
         <Input v-model="searchInput" class="inline-block mr-3" placeholder="Search"></Input>
         <Button class="inline-block" @click="create()">Create chat</Button>
