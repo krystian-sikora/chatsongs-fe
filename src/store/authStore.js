@@ -6,13 +6,21 @@ import router from "@/router/router.js";
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         tokens: ref(),
-        user: ref()
+        user: ref(),
+        error: ref()
     }),
     actions: {
         login(email, password) {
             login(email, password).then(
                 (res) => {
                     this.setTokens(res.data)
+                }
+            ).catch(
+                (res) => {
+                    console.warn('could not login', res)
+                    this.tokens = null
+                    this.user = null
+                    this.error = res
                 }
             )
         },

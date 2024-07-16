@@ -47,48 +47,50 @@ watch(tokens, async (tokens) => {
 </script>
 
 <template>
-  <form class="w-2/5 space-y-6 container mt-40 p-7 border rounded-md" @submit="onSubmit">
-    <FormField v-slot="{ componentField }" name="email">
-      <FormItem>
-        <FormLabel>Email</FormLabel>
-        <FormControl>
-          <Input placeholder="example@email.com" type="text" v-bind="componentField"/>
-        </FormControl>
-        <FormDescription>
-          This is your email.
-        </FormDescription>
-        <FormMessage/>
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ componentField }" name="username">
-      <FormItem>
-        <FormLabel>Username</FormLabel>
-        <FormControl>
-          <Input placeholder="chatsongs" type="text" v-bind="componentField"/>
-        </FormControl>
-        <FormDescription>
-          This is your public display name.
-        </FormDescription>
-        <FormMessage/>
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ componentField }" name="password">
-      <FormItem>
-        <FormLabel>Password</FormLabel>
-        <FormControl>
-          <Input type="password" v-bind="componentField"/>
-        </FormControl>
-        <FormDescription>
-          This is your password.
-        </FormDescription>
-        <FormMessage/>
-      </FormItem>
-    </FormField>
-    <Button class="w-full" type="submit">
-      Submit
-    </Button>
-    <p class="text-gray-400 text-center m-auto">Already have an account?
-      <RouterLink to="/login" class="hover:underline underline-offset-4">Click here.</RouterLink>
-    </p>
-  </form>
+  <div class="flex items-center justify-center h-screen">
+    <form class="w-11/12 max-w-96 space-y-6 p-7 border rounded-md" @submit="onSubmit">
+      <FormField v-slot="{ componentField }" name="email">
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input placeholder="example@email.com" type="text" v-bind="componentField"/>
+          </FormControl>
+          <FormDescription>
+            This is your email.
+          </FormDescription>
+          <FormMessage/>
+        </FormItem>
+      </FormField>
+      <FormField v-slot="{ componentField }" name="username">
+        <FormItem>
+          <FormLabel>Username</FormLabel>
+          <FormControl>
+            <Input placeholder="chatsongs" type="text" v-bind="componentField"/>
+          </FormControl>
+          <FormDescription>
+            This is your public display name.
+          </FormDescription>
+          <FormMessage/>
+        </FormItem>
+      </FormField>
+      <FormField v-slot="{ componentField }" name="password">
+        <FormItem>
+          <FormLabel>Password</FormLabel>
+          <FormControl>
+            <Input type="password" v-bind="componentField"/>
+          </FormControl>
+          <FormDescription>
+            This is your password.
+          </FormDescription>
+          <FormMessage/>
+        </FormItem>
+      </FormField>
+      <Button class="w-full" type="submit">
+        Submit
+      </Button>
+      <p class="text-gray-400 text-center m-auto">Already have an account?
+        <RouterLink to="/login" class="hover:underline underline-offset-4">Click here.</RouterLink>
+      </p>
+    </form>
+  </div>
 </template>

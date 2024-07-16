@@ -25,8 +25,12 @@ import WebPlayback from "@/components/WebPlayback.vue";
 import IconPreviousSong from "@/components/icons/IconPreviousSong.vue";
 import IconPauseSong from "@/components/icons/IconPauseSong.vue";
 import IconResumeSong from "@/components/icons/IconResumeSong.vue";
+import IconBack from "@/components/icons/IconBack.vue";
 
 const props = defineProps(['currentChat'])
+
+const emit = defineEmits(['update:showChatPreviews'])
+
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -132,12 +136,16 @@ function isCurrentPlayback() {
   return playbackRefs.currentPlayback.value && playbackRefs.currentPlayback.value.chat_id === props.currentChat.id
 }
 
+function updateShowChatPreviews() {
+  emit('update:showChatPreviews', true)
+}
+
 </script>
 
 <template>
   <div class="relative">
     <Sheet>
-    <ScrollArea ref="scrollAreaRef" class="h-[100%] px-6">
+    <ScrollArea ref="scrollAreaRef" class="h-[100%] px-1 md:px-6">
       <div v-for="message in props.currentChat.messages" ref="contentRef" class="first:pt-20 last:pb-16">
         <Message :authRefs="authRefs" :contactRefs="contactRefs" :message="message"/>
       </div>
@@ -147,10 +155,12 @@ function isCurrentPlayback() {
         </p>
       </div>
     </ScrollArea>
-    <div
-        class="border-b rounded-t px-6 h-16 absolute top-0 w-full backdrop-blur drop-shadow flex justify-center flex-col">
+    <div class="border-b rounded-t px-2 md:px-6 h-16 absolute top-0 w-full backdrop-blur drop-shadow flex justify-center flex-col">
       <div>
-        <h1 class="inline-block">Selected chat: {{ props.currentChat.name }}</h1>
+        <IconBack @click="updateShowChatPreviews" class="lg:hidden inline-block w-6 mr-3 hover:cursor-pointer "/>
+        <h1 class="inline-block align-middle truncate contain-inline-size w-[calc(100%-88px-36px)]">
+          {{ props.currentChat.name }}
+        </h1>
         <div class="*:inline-block *:w-6 *:ml-5 *:hover:cursor-pointer float-end">
           <IconPreviousSong v-if="isCurrentPlayback()" @click="playbackStore.action(token, props.currentChat.id, 'PREVIOUS')"/>
           <IconPauseSong v-if="isCurrentPlayback()" @click="playbackStore.action(token, props.currentChat.id, 'PAUSE')"/>
