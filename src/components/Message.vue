@@ -1,16 +1,16 @@
 <script setup>
 
 import { Avatar } from "@/components/ui/avatar/index.js";
-import { computed, onMounted, onUpdated, ref } from "vue";
+import { computed, onMounted, onUpdated, ref, watch } from "vue";
 
 const props = defineProps(['message', 'authRefs', 'contactRefs'])
 
 const senderId = ref()
 const userId = ref()
 
-const isUserMessage = computed(() => props.message.senderId === props.authRefs.user.value.id)
+const isUserMessage = computed(() => props.message.senderId === props.authRefs.user.value?.id)
 
-const sender = computed(() => props.contactRefs.contacts.value.find(c => c.id === senderId.value))
+const sender = computed(() => props.contactRefs.contacts.value?.find(c => c.id === senderId.value))
 
 onMounted(() => {
   evalMessage()
@@ -20,18 +20,22 @@ onUpdated(() => {
   evalMessage()
 })
 
+watch(() => props.authRefs.user.value, () => {
+  evalMessage()
+})
+
 async function evalMessage() {
   senderId.value = props.message.senderId
-  userId.value = props.authRefs.user.value.id
+  userId.value = props.authRefs.user.value?.id
 }
 
 </script>
 
 <template>
   <div v-if="isUserMessage" class="float-right">
-    <h1 class="inline-block border rounded-md my-2 p-2 max-w-[calc(100%-112px)] ml-[56px]"> {{
-        props.message.content
-      }} </h1>
+    <h1 class="inline-block border rounded-md my-2 p-2 max-w-[calc(100%-112px)] ml-[56px]">
+      {{props.message.content }}
+    </h1>
     <div class="inline-block float-right">
       <Avatar class="my-2 mx-2 flex drop-shadow">
         {{ props.authRefs.user.value.nickname.substring(0, 1) }}

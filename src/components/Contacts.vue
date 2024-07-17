@@ -60,7 +60,7 @@ watch(newContact, (newVal) => {
     <IconCross class="w-6 m-6" @click="router.push({path: 'chat'})"/>
     <div class="text-center my-12">
       <h1>This is your user code:</h1>
-      <p class="text-6xl">{{ authRefs.user.value.id }}</p>
+      <p class="text-6xl">{{ authRefs.user.value?.id }}</p>
     </div>
     <div class="*:m-2 justify-center text-center">
       <h2>Enter a friend's user code below to invite them</h2>

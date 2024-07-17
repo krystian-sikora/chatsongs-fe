@@ -16,7 +16,7 @@ function constructMsgPreview() {
   if (props.chat.messages.length === 0) return ''
 
   let msgContent = props.lastMsg.content
-  let isUserMessage = props.lastMsg.senderId === authRefs.user.value.id
+  let isUserMessage = props.lastMsg.senderId === authRefs.user.value?.id
 
   if (isUserMessage) return `You: ${ msgContent }`
 
