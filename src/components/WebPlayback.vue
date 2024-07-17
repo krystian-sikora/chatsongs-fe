@@ -1,12 +1,16 @@
 <script setup>
 
-import { onMounted, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { Button } from "@/components/ui/button/index.js";
+import PlaybackInstructions from "@/components/PlaybackInstructions.vue";
+import IconResumeSong from "@/components/icons/IconResumeSong.vue";
 
 const props = defineProps(['playbackStore', 'authToken', 'chatId'])
+const emit = defineEmits(['update:currentlyPlaying'])
 
 const { tokens, device, playbacks, currentPlayback } = storeToRefs(props.playbackStore)
+
 
 onMounted(() => {
   props.playbackStore.getPlayback(props.authToken, props.chatId)
@@ -55,9 +59,7 @@ function initPlayer() {
   });
 
   player.addListener('player_state_changed', ({position, duration, track_window: { current_track } }) => {
-    console.log('Currently Playing', current_track);
-    console.log('Position in Song', position);
-    console.log('Duration of Song', duration);
+    setCurrentlyPlaying(current_track)
   });
 
   player.connect();
@@ -71,6 +73,13 @@ function initPlayer() {
   })
 }
 
+function setCurrentlyPlaying(current_track) {
+  console.log('setting cp', current_track)
+  emit('update:currentlyPlaying', current_track)
+  currentlyPlaying.value = current_track
+
+}
+
 function joinSession() {
   props.playbackStore.join(props.authToken, props.chatId)
 }
@@ -79,16 +88,26 @@ function joinSession() {
 
 <template>
   <div>
+    <Button @click="emit('update:currentlyPlaying', 'xdddddd')">emit</Button>
     <div v-if="playbacks.get(chatId)">
       <div v-if="currentPlayback && currentPlayback.chat_id === chatId">
+        <div class="my-7">
+          <strong>You are currently in a session.</strong>
+          <p>Click the "Quit session" button below to leave the session.</p>
+        </div>
         <Button @click="playbackStore.quit(props.authToken, props.chatId)">Quit session</Button>
       </div>
       <div v-else>
+        <div class="my-7">
+          <strong>This chat has a current session active.</strong>
+          <p>Click the "Join Session" button below to synchronize your playback with session host!</p>
+        </div>
         <Button @click="joinSession">Join session</Button>
       </div>
     </div>
     <div v-else>
-      <Button @click="joinSession">Create session</Button>
+      <PlaybackInstructions class="my-7"/>
+      <Button @click="joinSession" class="text-center">Create session</Button>
     </div>
   </div>
 </template>

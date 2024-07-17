@@ -62,9 +62,9 @@ watch(newContact, (newVal) => {
       <h1>This is your user code:</h1>
       <p class="text-6xl">{{ authRefs.user.value.id }}</p>
     </div>
-    <div class="*:m-2">
+    <div class="*:m-2 justify-center text-center">
       <h2>Enter a friend's user code below to invite them</h2>
-      <div class="*:inline-block flex space-x-2">
+      <div class="*:inline-block flex space-x-2 justify-center">
         <Input v-model="contactId" class="w-96" type="number"></Input>
         <Button @click="invite()">add contact</Button>
       </div>
