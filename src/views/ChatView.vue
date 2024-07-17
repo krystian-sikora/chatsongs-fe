@@ -11,13 +11,14 @@ import ChatPreviewsArea from "@/components/ChatPreviewsArea.vue";
 import { useContactStore } from "@/store/contactStore.js";
 import SidebarIcons from "@/components/SidebarIcons.vue";
 import DummyChat from "@/components/DummyChat.vue";
+import { usePlaybackStore } from "@/store/playbackStore.js";
 
 const props = defineProps(['id'])
 
 const authStore = useAuthStore()
 const authRefs = storeToRefs(authStore)
 
-const token = authRefs.tokens.value['access_token']
+const authToken = authRefs.tokens.value['access_token']
 
 const chatStore = useChatStore()
 const chatRefs = storeToRefs(chatStore)
@@ -26,6 +27,11 @@ const contactStore = useContactStore()
 
 const currentChat = ref(chatRefs.chats.value[0])
 const isCreatingNewChat = ref(false)
+
+const playbackStore = usePlaybackStore()
+const { currentPlayback, device, tokens } = storeToRefs(playbackStore)
+
+const currentlyPlaying = ref(null)
 
 function loadChat() {
   if (props.id && chatRefs.chats.value.length !== 0) {
@@ -61,12 +67,13 @@ function loadChat() {
 }
 
 onMounted(() => {
-  if (!token) return
+  if (!authToken) return
 
-  chatStore.getChats(token)
-  contactStore.getContacts(token)
+  chatStore.getChats(authToken)
+  contactStore.getContacts(authToken)
 
   loadChat()
+  loadScript()
 })
 
 onUpdated(() => {
@@ -87,6 +94,62 @@ const showChatPreviews = ref(false)
 function updateShowChatPreviews(bool) {
   showChatPreviews.value = bool
   console.log(bool)
+}
+
+function loadScript() {
+  const script = document.createElement('script')
+  script.src = 'https://sdk.scdn.co/spotify-player.js'
+  script.async = true
+  document.body.appendChild(script)
+
+  window.onSpotifyWebPlaybackSDKReady = () => {
+    if (!tokens.value['access_token']) {
+      console.log('no token, watching for changes', tokens.value)
+      watch(() => tokens.value, (newTokens) => {
+        console.log('new token', tokens.value)
+        if (!newTokens['access_token']) return
+        console.log(tokens.value)
+        initPlayer()
+      })
+    } else {
+      console.log('token found', tokens.value)
+      initPlayer()
+    }
+  }
+}
+
+function initPlayer() {
+  if (device.value['is_active'] === true) return
+
+  const player = new window.Spotify.Player({
+    name: 'ChatSongs Player',
+    getOAuthToken: cb => { cb(tokens.value['access_token']) },
+    volume: 0.5
+  });
+
+  player.addListener('ready', ({ device_id }) => {
+    playbackStore.setDevice(authToken, device_id, true)
+    console.log('Ready with Device ID', device_id);
+  });
+
+  player.addListener('not_ready', ({ device_id }) => {
+    playbackStore.setDevice(authToken, device_id, false)
+    console.log('Device ID has gone offline', device_id);
+  });
+
+  player.addListener('player_state_changed', ({position, duration, track_window: { current_track } }) => {
+    currentlyPlaying.value = `${current_track.artists[0].name} - ${current_track.name}`
+  });
+
+  player.connect();
+
+  watch(() => currentPlayback.value, (newPlayback) => {
+    console.log('changed', newPlayback)
+    if (!newPlayback) {
+      player.pause()
+      console.log('paused')
+    }
+  })
 }
 
 </script>
@@ -117,7 +180,7 @@ function updateShowChatPreviews(bool) {
                     @update:isCreatingNewChat="updateIsCreatingNewChat"
                     @update:showChatPreviews="updateShowChatPreviews">
         </CreateChat>
-        <Chat v-else-if="props.id && currentChat" :currentChat="currentChat"
+        <Chat v-else-if="props.id && currentChat" :currentChat="currentChat" :currentlyPlaying="currentlyPlaying"
               @update:showChatPreviews="updateShowChatPreviews">
         </Chat>
         <DummyChat v-else-if="!props.id" @update:showChatPreviews="updateShowChatPreviews"/>

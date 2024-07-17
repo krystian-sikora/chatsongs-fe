@@ -27,7 +27,7 @@ import IconPauseSong from "@/components/icons/IconPauseSong.vue";
 import IconResumeSong from "@/components/icons/IconResumeSong.vue";
 import IconBack from "@/components/icons/IconBack.vue";
 
-const props = defineProps(['currentChat'])
+const props = defineProps(['currentChat', 'currentlyPlaying'])
 const emit = defineEmits(['update:showChatPreviews'])
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -44,8 +44,6 @@ const contactRefs = storeToRefs(contactStore)
 
 const playbackStore = usePlaybackStore()
 const playbackRefs = storeToRefs(playbackStore)
-
-const currentlyPlaying = ref(null)
 
 const chatInput = ref('')
 const contentRef = ref(null)
@@ -162,16 +160,20 @@ function updateShowChatPreviews() {
         :class="isCurrentPlayback ? 'w-[calc(100%-264px-36px)]' : 'w-[calc(100%-88px-36px)]'">
           {{ props.currentChat.name }}
         </h1>
-        <div class="*:inline-block *:w-6 *:ml-5 *:hover:cursor-pointer float-end">
-          <p v-if="currentlyPlaying"> {{ currentlyPlaying }} </p>
-          <IconPreviousSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'PREVIOUS')"/>
-          <IconPauseSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'PAUSE')"/>
-          <IconResumeSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'PLAY')"/>
-          <IconPreviousSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'NEXT')" class="rotate-180"/>
-          <SheetTrigger as-child>
-            <IconMusicNote/>
-          </SheetTrigger>
-          <IconThreeDots/>
+        <div class="float-end relative">
+          <div class="*:inline-block *:w-6 *:ml-5 *:hover:cursor-pointer float-end ">
+            <IconPreviousSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'PREVIOUS')"/>
+            <IconPauseSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'PAUSE')"/>
+            <IconResumeSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'PLAY')"/>
+            <IconPreviousSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'NEXT')" class="rotate-180"/>
+            <SheetTrigger as-child>
+              <IconMusicNote/>
+            </SheetTrigger>
+            <IconThreeDots/>
+          </div>
+          <div v-if="isCurrentPlayback" class="absolute left-0 top-7">
+            <p v-if="props.currentlyPlaying" class="contain-inline-size truncate w-60 ml-5 text-xs text-gray-600"> {{ props.currentlyPlaying }} </p>
+          </div>
         </div>
       </div>
     </div>

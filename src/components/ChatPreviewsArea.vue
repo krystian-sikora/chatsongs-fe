@@ -10,6 +10,7 @@ import { computed } from "vue";
 import { useContactStore } from "@/store/contactStore.js";
 import SidebarIcons from "@/components/SidebarIcons.vue";
 import DummyChatPreview from "@/components/DummyChatPreview.vue";
+import { usePlaybackStore } from "@/store/playbackStore.js";
 
 const props = defineProps(['id', 'isCreatingNewChat', 'currentChat'])
 const emit = defineEmits(['update:isCreatingNewChat', 'update:currentChat', "update:showChatPreviews"])
@@ -19,6 +20,8 @@ const chatRefs = storeToRefs(chatStore)
 
 const contactStore = useContactStore()
 const contactRefs = storeToRefs(contactStore)
+
+const playbackRefs = storeToRefs(usePlaybackStore())
 
 const chats = computed(() => {
   return !!chatRefs.chats.value;
@@ -56,6 +59,11 @@ function isCurrentChat(chatId) {
   return Number(props.id) === chatId
 }
 
+function isCurrentPlayback(chatId) {
+  return playbackRefs.currentPlayback.value && playbackRefs.currentPlayback.value.chat_id === chatId
+}
+
+
 </script>
 
 <template>
@@ -63,7 +71,8 @@ function isCurrentChat(chatId) {
     <div v-for="chat in chatRefs.chats.value" v-if="chats"
          class="cursor-pointer first:mt-20 pl-2 pr-4" @click="viewChat(chat)">
       <ChatPreview :chat="chat" :contactRefs="contactRefs" :isCurrentChat="isCurrentChat(chat.id)"
-                   :lastMsg="chat.messages[chat.messages.length - 1]"></ChatPreview>
+                   :lastMsg="chat.messages[chat.messages.length - 1]"
+                   :isCurrentPlayback="isCurrentPlayback(chat.id)"/>
     </div>
     <div v-if="chatRefs.chats.value.length === 0" class="mt-20 first:mt-20 pl-2 pr-4">
       <DummyChatPreview @click="emit('update:showChatPreviews', false)" class="rounded-md bg-gray-200 drop-shadow"/>
@@ -72,7 +81,7 @@ function isCurrentChat(chatId) {
 
   <div class="absolute bottom-0 w-full border-t bg-white drop-shadow h-16 justify-center flex-col flex lg:hidden">
     <div class="*:inline-block *:w-10 *:p-1 *:ml-3">
-      <SidebarIcons></SidebarIcons>
+      <SidebarIcons/>
     </div>
   </div>
 
