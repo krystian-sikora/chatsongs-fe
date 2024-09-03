@@ -1,6 +1,6 @@
 <script setup>
 
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/input/index.js'
 import { Button } from "@/components/ui/button/index.js";
 import { computed, nextTick, onMounted, onUnmounted, onUpdated, ref, watch } from "vue";
 import Message from "@/components/Message.vue";
@@ -16,21 +16,21 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTitle,
   SheetTrigger
 } from "@/components/ui/sheet/index.js";
 import { spotifyLogin } from "@/api/api.js";
 import { usePlaybackStore } from "@/store/playbackStore.js";
-import WebPlayback from "@/components/WebPlayback.vue";
-import IconPreviousSong from "@/components/icons/IconPreviousSong.vue";
-import IconPauseSong from "@/components/icons/IconPauseSong.vue";
-import IconResumeSong from "@/components/icons/IconResumeSong.vue";
 import IconBack from "@/components/icons/IconBack.vue";
+import FilebasedPlayback from "@/components/filebasedplayback/FilebasedPlayback.vue";
+import { useFilebasedPlaybackStore } from "@/store/filebasedPlaybackStore.js";
+import PlaybackControls from "@/components/filebasedplayback/PlaybackControls.vue";
 
-const props = defineProps(['currentChat', 'currentlyPlaying'])
+const props = defineProps(['currentChat', 'currentlyPlaying', 'globalAudio'])
 const emit = defineEmits(['update:showChatPreviews'])
 
 const apiUrl = import.meta.env.VITE_API_URL;
+
+const filebasedPlaybackStore = useFilebasedPlaybackStore()
 
 const authStore = useAuthStore()
 const authRefs = storeToRefs(authStore)
@@ -157,15 +157,12 @@ function updateShowChatPreviews() {
       <div>
         <IconBack @click="updateShowChatPreviews" class="lg:hidden inline-block w-6 mr-3 hover:cursor-pointer "/>
         <h1 class="inline-block align-middle truncate contain-inline-size"
-        :class="isCurrentPlayback ? 'w-[calc(100%-264px-36px)]' : 'w-[calc(100%-88px-36px)]'">
+          :class="isCurrentPlayback ? 'w-[calc(100%-264px-36px)]' : 'w-[calc(100%-88px-36px-116px)] md:w-[calc(100%-88px-36px-116px)]'">
           {{ props.currentChat.name }}
         </h1>
         <div class="float-end relative">
-          <div class="*:inline-block *:w-6 *:ml-5 *:hover:cursor-pointer float-end ">
-            <IconPreviousSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'PREVIOUS')"/>
-            <IconPauseSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'PAUSE')"/>
-            <IconResumeSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'PLAY')"/>
-            <IconPreviousSong v-if="isCurrentPlayback" @click="playbackStore.action(token, props.currentChat.id, 'NEXT')" class="rotate-180"/>
+          <PlaybackControls v-if="filebasedPlaybackStore.isInSession" class="float-left" :globalAudio="props.globalAudio"/>
+          <div class="*:inline-block inline-block *:w-6 *:ml-5 *:hover:cursor-pointer float-end">
             <SheetTrigger as-child>
               <IconMusicNote/>
             </SheetTrigger>
@@ -181,20 +178,24 @@ function updateShowChatPreviews() {
       <Input v-model="chatInput" class="inline-block w-[100%] mx-2 drop-shadow" type="text"/>
       <Button class="inline-block drop-shadow" @click="sendMessage()">Send</Button>
     </div>
+<!--      <SheetContent>-->
+<!--        <SheetHeader>-->
+<!--          <SheetTitle>Spotify Playback</SheetTitle>-->
+<!--        </SheetHeader>-->
+<!--        <div v-if="playbackRefs.isLoggedIn.value === false">-->
+<!--          <div class="my-7">-->
+<!--            <strong>You are currently not logged in with Spotify.</strong>-->
+<!--            <p>In order to connect your <strong>chatsongs</strong> account with Spotify press the button below.</p>-->
+<!--          </div>-->
+<!--          <Button @click="spotifyLoginRedirect()" class="">login to spotify</Button>-->
+<!--        </div>-->
+<!--        <div v-else>-->
+<!--          <WebPlayback :playbackStore="playbackStore" :authToken="token" :chatId="props.currentChat.id"/>-->
+<!--        </div>-->
+<!--      </SheetContent>-->
       <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Spotify Playback</SheetTitle>
-        </SheetHeader>
-        <div v-if="playbackRefs.isLoggedIn.value === false">
-          <div class="my-7">
-            <strong>You are currently not logged in with Spotify.</strong>
-            <p>In order to connect your <strong>chatsongs</strong> account with Spotify press the button below.</p>
-          </div>
-          <Button @click="spotifyLoginRedirect()" class="">login to spotify</Button>
-        </div>
-        <div v-else>
-          <WebPlayback :playbackStore="playbackStore" :authToken="token" :chatId="props.currentChat.id"/>
-        </div>
+        <SheetHeader>Playback</SheetHeader>
+        <FilebasedPlayback :filebasedPlaybackStore="filebasedPlaybackStore"/>
       </SheetContent>
     </Sheet>
   </div>

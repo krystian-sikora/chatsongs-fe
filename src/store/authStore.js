@@ -36,7 +36,7 @@ export const useAuthStore = defineStore('auth', {
             )
         },
         refresh() {
-            refresh(localStorage.getItem('refresh_token')).then(
+            return refresh(localStorage.getItem('refresh_token')).then(
                 (res) => {
                     this.setTokens(res.data)
                     return true

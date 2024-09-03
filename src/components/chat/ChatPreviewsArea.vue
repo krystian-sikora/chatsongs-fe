@@ -1,7 +1,7 @@
 <script setup>
 
 import IconNewChat from "@/components/icons/IconNewChat.vue";
-import ChatPreview from "@/components/ChatPreview.vue";
+import ChatPreview from "@/components/chat/ChatPreview.vue";
 import { ScrollArea } from "@/components/ui/scroll-area/index.js";
 import { useChatStore } from "@/store/chatStore.js";
 import { storeToRefs } from "pinia";
@@ -9,7 +9,7 @@ import router from "@/router/router.js";
 import { computed } from "vue";
 import { useContactStore } from "@/store/contactStore.js";
 import SidebarIcons from "@/components/SidebarIcons.vue";
-import DummyChatPreview from "@/components/DummyChatPreview.vue";
+import DummyChatPreview from "@/components/chat/DummyChatPreview.vue";
 import { usePlaybackStore } from "@/store/playbackStore.js";
 
 const props = defineProps(['id', 'isCreatingNewChat', 'currentChat'])

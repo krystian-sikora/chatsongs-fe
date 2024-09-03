@@ -1,15 +1,15 @@
 <script setup>
 
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/input/index.js'
 import { useContactStore } from "@/store/contactStore.js";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, ref } from "vue";
 import { useAuthStore } from "@/store/authStore.js";
 import { Avatar } from "@/components/ui/avatar/index.js";
 import { Checkbox } from "@/components/ui/checkbox/index.js";
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button/index.js'
 import { useChatStore } from "@/store/chatStore.js";
-import Badge from "@/components/ui/badge/Badge.vue";
+import Badge from "../ui/badge/Badge.vue";
 import IconBack from "@/components/icons/IconBack.vue";
 
 const props = defineProps(['currentChat', 'isCreatingNewChat'])

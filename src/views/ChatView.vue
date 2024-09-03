@@ -4,13 +4,13 @@ import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
 import { useChatStore } from "@/store/chatStore.js";
 import { onMounted, onUpdated, ref, watch } from "vue";
-import Chat from "@/components/Chat.vue";
-import CreateChat from "@/components/CreateChat.vue";
+import Chat from "@/components/chat/Chat.vue";
+import CreateChat from "@/components/chat/CreateChat.vue";
 import router from "@/router/router.js";
-import ChatPreviewsArea from "@/components/ChatPreviewsArea.vue";
+import ChatPreviewsArea from "@/components/chat/ChatPreviewsArea.vue";
 import { useContactStore } from "@/store/contactStore.js";
 import SidebarIcons from "@/components/SidebarIcons.vue";
-import DummyChat from "@/components/DummyChat.vue";
+import DummyChat from "@/components/chat/DummyChat.vue";
 import { usePlaybackStore } from "@/store/playbackStore.js";
 
 const props = defineProps(['id'])
