@@ -1,6 +1,6 @@
 <script setup>
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table/index.js";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table/index.js";
 import IconThreeDots from "@/components/icons/IconThreeDots.vue";
 import { ref } from "vue";
 import IconPauseSong from "@/components/icons/IconPauseSong.vue";
@@ -24,6 +24,10 @@ function alterState() {
 </script>
 
 <template>
+  <h1 class="text-sm my-4" v-if="music.length === 0">
+    There are currently no songs in the queue. Add some songs below to start listening!
+  </h1>
+
   <Table>
     <TableHeader>
       <TableRow>
@@ -31,7 +35,7 @@ function alterState() {
     </TableHeader>
     <TableBody>
       <TableRow v-for="(songQueueObj, index) in music" :key="songQueueObj.id"
-                :class="index === 0 ? 'text-green-700 font-bold': '' "
+                :class="index === 0 ? 'bg-gradient-to-br from-primary-700 to-rose-500 text-transparent bg-clip-text font-bold': '' "
                 class="hover:cursor-pointer"
                 @click="index === 0 ? alterState() : skipTo(index)"
                 @mouseover="hoverMap.set(index, true)" @mouseleave="hoverMap.set(index, false)">

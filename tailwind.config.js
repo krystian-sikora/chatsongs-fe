@@ -23,6 +23,9 @@ module.exports = {
     },
     extend: {
       colors: {
+        grad1: "#b794f4",
+        grad2: "#ed64a6",
+        grad3: "#f56565",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -31,6 +34,16 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          "50": "#f2ebfd",
+          "100": "#e5d8fb",
+          "200": "#cbb0f8",
+          "300": "#b089f4",
+          "400": "#7459a3",
+          "500": "#7c3aed",
+          "600": "#632ebe",
+          "700": "#4a238e",
+          "800": "#32175f",
+          "900": "#190c2f"
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",

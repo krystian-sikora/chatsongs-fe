@@ -152,16 +152,21 @@ function initPlayer() {
   })
 }
 
+function xd() {
+  isCreatingNewChat.value = false
+  console.log('xd')
+}
+
 </script>
 
 <template>
   <div class="lg:mt-3 overflow-x-hidden">
 <!--    <h1 v-if="authRefs.tokens.value['access_token']">Hello, {{ authRefs.user.value['nickname'] }}</h1>-->
     <div class="flex lg:*:ml-3 lg:last:mr-3">
-      <div class="flex-none border rounded-md *:p-1 *:w-10 *:m-2 *:hover:cursor-pointer hidden lg:block">
-        <SidebarIcons/>
+      <div class="flex-none bg-secondary border rounded-md hidden lg:block">
+        <SidebarIcons class="rounded-md bg-white m-1 py-1 drop-shadow *:p-1 *:w-10 *:m-2 *:hover:cursor-pointer" fillColor="fill-[url(#grad2)]" strokeColor="stroke-[url(#grad2)]"/>
       </div>
-      <div class="flex-1 max-w-72 border rounded-md lg:block transition-transform duration-300 fixed top-0 left-0 z-30 w-64 lg:relative lg:ml-3 lg:translate-x-0"
+      <div class="flex-1 max-w-72 bg-secondary border rounded-md lg:block transition-transform duration-300 fixed top-0 left-0 z-30 w-64 lg:relative lg:ml-3 lg:translate-x-0"
            :class="showChatPreviews ? 'translate-x-0' : '-translate-x-full'">
         <ChatPreviewsArea :id="props.id" :currentChat="currentChat" :isCreatingNewChat="isCreatingNewChat"
                           @update:isCreatingNewChat="updateIsCreatingNewChat"
@@ -173,7 +178,7 @@ function initPlayer() {
           This might not be an issue in PWA?
 
           The md:*:h-[calc(100vh-1.5rem)] subtracts margins that are only on medium+ screens -->
-      <div class="flex-1 transition-transform duration-300 w-[1200px] border rounded-md *:h-[calc(100vh-60px)] lg:*:h-[calc(100vh-1.5rem)] relative"
+      <div class="flex-1 transition-transform duration-300 w-[1200px] bg-secondary border rounded-md *:h-[calc(100vh-60px)] lg:*:h-[calc(100vh-1.5rem)] relative"
            :class="showChatPreviews ? 'transform translate-x-64' : 'transform translate-x-0'">
         <CreateChat v-if="isCreatingNewChat" :currentChat="currentChat"
                     :isCreatingNewChat="isCreatingNewChat"

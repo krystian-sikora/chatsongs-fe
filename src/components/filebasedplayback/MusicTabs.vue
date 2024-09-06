@@ -14,7 +14,7 @@ const { music, backtrack } = defineProps(['music', 'backtrack'])
   <div>
 
     <Tabs default-value="musicQueue">
-      <TabsList>
+      <TabsList class="grid w-full grid-cols-2">
         <TabsTrigger value="musicQueue">
           music queue
         </TabsTrigger>

@@ -7,13 +7,16 @@ import IconLogout from "@/components/icons/IconLogout.vue";
 import router from "@/router/router.js";
 
 const authStore = useAuthStore()
+const { fillColor, strokeColor } = defineProps(['fillColor', 'strokeColor'])
+
 </script>
 
 <template>
-  <IconChats class="rounded-md bg-gray-200 drop-shadow"></IconChats>
-  <IconInviteUser @click="router.push({ path: '/contacts' })"></IconInviteUser>
-  <IconLogout @click="authStore.logout()"/>
-  <h1 @click="router.push({ path: '/test' })">FILES</h1>
+  <div>
+    <IconChats :strokeColor="strokeColor"></IconChats>
+    <IconInviteUser @click="router.push({ path: '/contacts' })" :fillColor="fillColor"></IconInviteUser>
+    <IconLogout @click="authStore.logout()" :fillColor="fillColor"/>
+  </div>
 </template>
 
 <style scoped>

@@ -1,102 +1,63 @@
 <script setup>
 
 import { Button } from "@/components/ui/button/index.js";
-import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
-import { Stomp } from "@stomp/stompjs";
-import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { ErrorMessage } from "vee-validate";
 import CurrentlyListeningUsers from "@/components/filebasedplayback/CurrentlyListeningUsers.vue";
 import SongQueueTable from "@/components/filebasedplayback/MusicTabs.vue";
 import FilesInput from "@/components/filebasedplayback/FilesInput.vue";
-import { attachListeners } from "@/components/filebasedplayback/playback.js";
 import PlaybackControls from "@/components/filebasedplayback/PlaybackControls.vue";
+import { joinFilebasedPlayback, quitSession, splitSongQueue } from "@/components/filebasedplayback/playback.js";
+import { useAuthStore } from "@/store/authStore.js";
+import IconLogout from "@/components/icons/IconLogout.vue";
+import SimpleTooltip from "@/components/SimpleTooltip.vue";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert/index.js";
+import { AlertCircle } from 'lucide-vue-next'
 
 const { chatId, filebasedPlaybackStore } = defineProps(['chatId', 'filebasedPlaybackStore'])
-const apiUrl = import.meta.env.VITE_API_URL;
-
+const { isInSession, queue, backtrack, playbackData, isError, sessionChatId } = storeToRefs(filebasedPlaybackStore)
 const authStore = useAuthStore()
-const { tokens: authTokens } = storeToRefs(authStore)
-const { isInSession, playbackData, backtrack } = storeToRefs(filebasedPlaybackStore)
-
-const isError = ref(false)
-
-let stompClient = null
 
 onMounted(() => {
   authStore.isAuthenticated()
 })
 
-function joinFilebasedPlayback(chatId) {
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: apiUrl + '/api' + '/filebased-playback',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${ authTokens.value['access_token'] }`
-    },
-    data: chatId
-  }
-
-  axios.request(config)
-      .then((response) => {
-        playbackData.value = response.data
-        isInSession.value = true
-        isError.value = false
-        attachListeners()
-      })
-      .catch((error) => {
-        console.log(error)
-        isInSession.value = false
-        isError.value = true
-      });
-}
-
-function initWebSocketConnection() {
-  let socket = new SockJS(apiUrl + '/chat')
-  stompClient = Stomp.over(socket)
-  stompClient.connect({ 'Authorization': `Bearer ${ authTokens.value['access_token'] }` }, function (frame) {
-    console.log('Connected: ' + frame)
-    stompClient.subscribe('/topic/messages', function (messageOutput) {
-      console.log(messageOutput.body)
-    });
-    stompClient.subscribe(`/user/${ authRefs.user.value['id'] }/queue/messages`, (message) => {
-      console.log(`filebased playback message: ${message.body}`)
-      let json = JSON.parse(message.body)
-      console.log(json)
-    });
-  });
-}
-
-// function sendMessage() {
-//     stompClient.publish({
-//         destination: "/app/chat",
-//         body:
-//             `{
-//           "chat_id": ${ props.currentChat.id },
-//           "content": "${ chatInput.value }"
-//         }`
-//     })
-//     chatInput.value = ''
-// }
-
-function updatePlaybackData(newPlaybackData) {
-  playbackData.value = newPlaybackData
-}
-
 </script>
 
 <template>
   <div>
-    <Button v-if="!isInSession" @click="joinFilebasedPlayback(chatId ? chatId : 402)">Join file-based playback</Button>
+
+    <div v-if="!isInSession" class="  ">
+      <h1 class="text-xl my-3 text-justify">This is the place where you will be able to listen to
+        <span class="bg-gradient-to-br from-primary-700 to-rose-500 text-transparent bg-clip-text font-bold">music</span>
+        with your friends!
+      </h1>
+      <div class="flex items-center justify-center">
+        <Button class="text-xl p-6" @click="joinFilebasedPlayback(chatId ? chatId : 402)">Join playback now!</Button>
+      </div>
+
+    </div>
+
     <ErrorMessage v-if="isError">Error while joining playback</ErrorMessage>
     <div v-if="isInSession && !isError">
-      <PlaybackControls class="my-2"/>
+      <div class="flex">
+        <PlaybackControls class="my-2"/>
+        <span class="flex-1"></span>
+        <SimpleTooltip onHoverText="quit session">
+          <IconLogout @click="quitSession()" class="float-end w-8">Quit</IconLogout>
+        </SimpleTooltip>
+      </div>
+      <Alert v-if="chatId !== sessionChatId" variant="destructive">
+        <AlertCircle class="w-4 h-4" />
+        <AlertTitle>Careful!</AlertTitle>
+        <AlertDescription>
+          This session is not from this chat
+        </AlertDescription>
+      </Alert>
       <CurrentlyListeningUsers :users="playbackData['active_users']" class="my-2"/>
-      <SongQueueTable :music="playbackData['song_queue']" :backtrack='backtrack'/>
-      <FilesInput :playbackData="playbackData" @update:playbackData="updatePlaybackData"/>
+      <SongQueueTable :music="queue" :backtrack='backtrack'/>
+      <FilesInput :playbackData="playbackData" @update:playbackData="splitSongQueue"/>
     </div>
   </div>
 </template>

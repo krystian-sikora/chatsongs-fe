@@ -8,6 +8,7 @@ const { backtrack } = defineProps(['backtrack'])
 </script>
 
 <template>
+  <h1 v-if="backtrack.length === 0" class="text-sm my-4">There are no recently played songs in this session</h1>
   <Table>
     <TableHeader>
       <TableRow>
@@ -28,5 +29,4 @@ const { backtrack } = defineProps(['backtrack'])
       </TableRow>
     </TableBody>
   </Table>
-  <h1 v-if="backtrack.length === 0" class="text-xs text-red-500 my-2">There are no recently played songs in this session</h1>
 </template>

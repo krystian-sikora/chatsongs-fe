@@ -3,7 +3,7 @@
 import { Input } from '@/components/ui/input/index.js'
 import { Button } from "@/components/ui/button/index.js";
 import { computed, nextTick, onMounted, onUnmounted, onUpdated, ref, watch } from "vue";
-import Message from "@/components/Message.vue";
+import Message from "@/components/chat/Message.vue";
 import { ScrollArea } from "@/components/ui/scroll-area/index.js";
 import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
@@ -24,6 +24,7 @@ import IconBack from "@/components/icons/IconBack.vue";
 import FilebasedPlayback from "@/components/filebasedplayback/FilebasedPlayback.vue";
 import { useFilebasedPlaybackStore } from "@/store/filebasedPlaybackStore.js";
 import PlaybackControls from "@/components/filebasedplayback/PlaybackControls.vue";
+import { Form } from "vee-validate";
 
 const props = defineProps(['currentChat', 'currentlyPlaying', 'globalAudio'])
 const emit = defineEmits(['update:showChatPreviews'])
@@ -144,7 +145,7 @@ function updateShowChatPreviews() {
   <div class="relative">
     <Sheet>
     <ScrollArea ref="scrollAreaRef" class="h-[100%] px-1 md:px-6">
-      <div v-for="message in props.currentChat.messages" ref="contentRef" class="first:pt-20 last:pb-16">
+      <div v-for="message in props.currentChat.messages" ref="contentRef" class="first:pt-20 last:pb-[4.25rem]">
         <Message :authRefs="authRefs" :contactRefs="contactRefs" :message="message"/>
       </div>
       <div v-if="props.currentChat.messages.length === 0">
@@ -153,20 +154,22 @@ function updateShowChatPreviews() {
         </p>
       </div>
     </ScrollArea>
-    <div class="border-b rounded-t px-2 md:px-6 h-16 absolute top-0 w-full backdrop-blur drop-shadow flex justify-center flex-col">
+    <div class="border-b rounded-t-md px-2 md:px-6 h-16 absolute top-0 w-full backdrop-blur drop-shadow flex justify-center flex-col">
       <div>
         <IconBack @click="updateShowChatPreviews" class="lg:hidden inline-block w-6 mr-3 hover:cursor-pointer "/>
-        <h1 class="inline-block align-middle truncate contain-inline-size"
+        <h1 class="text-secondary font-bold inline-block align-middle truncate contain-inline-size"
           :class="isCurrentPlayback ? 'w-[calc(100%-264px-36px)]' : 'w-[calc(100%-88px-36px-116px)] md:w-[calc(100%-88px-36px-116px)]'">
-          {{ props.currentChat.name }}
+          <span class="drop-shadow-[1px_1px_1px_rgba(255,255,255,1)] bg-gradient-to-br from-primary-700 to-rose-500 text-transparent bg-clip-text font-bold">
+            {{ props.currentChat.name }}
+          </span>
         </h1>
         <div class="float-end relative">
           <PlaybackControls v-if="filebasedPlaybackStore.isInSession" class="float-left" :globalAudio="props.globalAudio"/>
-          <div class="*:inline-block inline-block *:w-6 *:ml-5 *:hover:cursor-pointer float-end">
+          <div class="drop-shadow *:inline-block inline-block *:w-6 *:ml-5 *:hover:cursor-pointer float-end">
             <SheetTrigger as-child>
               <IconMusicNote/>
             </SheetTrigger>
-            <IconThreeDots/>
+            <IconThreeDots fill-color="fill-white"/>
           </div>
           <div v-if="isCurrentPlayback" class="absolute left-0 top-7">
             <p v-if="props.currentlyPlaying" class="contain-inline-size truncate w-60 ml-5 text-xs text-gray-600"> {{ props.currentlyPlaying }} </p>
@@ -174,10 +177,11 @@ function updateShowChatPreviews() {
         </div>
       </div>
     </div>
-    <div class="absolute bottom-[2vh] px-5 flex w-full bg-transparent">
+    <Form class="absolute bottom-[2vh] px-5 flex w-full bg-transparent" @submit.prevent>
+
       <Input v-model="chatInput" class="inline-block w-[100%] mx-2 drop-shadow" type="text"/>
       <Button class="inline-block drop-shadow" @click="sendMessage()">Send</Button>
-    </div>
+    </Form>
 <!--      <SheetContent>-->
 <!--        <SheetHeader>-->
 <!--          <SheetTitle>Spotify Playback</SheetTitle>-->
@@ -193,9 +197,9 @@ function updateShowChatPreviews() {
 <!--          <WebPlayback :playbackStore="playbackStore" :authToken="token" :chatId="props.currentChat.id"/>-->
 <!--        </div>-->
 <!--      </SheetContent>-->
-      <SheetContent>
+      <SheetContent class="bg-secondary">
         <SheetHeader>Playback</SheetHeader>
-        <FilebasedPlayback :filebasedPlaybackStore="filebasedPlaybackStore"/>
+        <FilebasedPlayback :filebasedPlaybackStore="filebasedPlaybackStore" :chatId="currentChat.id"/>
       </SheetContent>
     </Sheet>
   </div>

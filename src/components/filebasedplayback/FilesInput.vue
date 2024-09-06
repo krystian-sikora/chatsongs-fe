@@ -26,8 +26,6 @@ async function addSong() {
 function postSong(song) {
   let data = new FormData()
   data.append("file", song)
-
-  console.log('pd', playbackData)
   const url = playbackData ? apiUrl + '/filebased-playback/' + playbackData.id : apiUrl + '/songs'
 
   let config = {
@@ -45,7 +43,6 @@ function postSong(song) {
         isSent.value = true
         isError.value = false
         playbackData ? emits('update:playbackData', response.data) : null
-        console.log(response)
       })
       .catch((error) => {
         isError.value = true

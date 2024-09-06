@@ -67,28 +67,28 @@ function updateShowChatPreviews() {
 
 <template>
   <div>
-    <div class="border-b rounded-t px-2 md:px-6 h-16 w-full backdrop-blur drop-shadow flex justify-center flex-col">
+    <div class="font-bold border-b rounded-t-md px-2 md:px-6 h-16 w-full backdrop-blur drop-shadow flex justify-center flex-col">
       <div>
         <IconBack @click="updateShowChatPreviews" class="lg:hidden inline-block w-6 mr-3 hover:cursor-pointer "/>
-        <h1 class="inline-block align-middle">Create new chat</h1>
+        <h1 class="drop-shadow-[1px_1px_1px_rgba(255,255,255,1)] bg-gradient-to-br from-primary-700 to-rose-500 text-transparent bg-clip-text font-bold inline-block align-middle">Create new chat</h1>
 <!--        <Input v-model="searchInput" class="inline-block mr-3 w-1/2" placeholder="Search"></Input>-->
 <!--        <Button class="inline-block" @click="create()">Create chat</Button>-->
       </div>
     </div>
-    <div class="*:mx-2">
-      <div class="flex my-4">
+    <div>
+      <div class="flex mt-4 mx-2" :class="toInvite.length === 0 ? 'mb-7' : 'mb-1'">
         <Input v-model="searchInput" class="inline-block mr-3" placeholder="Search"></Input>
         <Button class="inline-block" @click="create()">Create chat</Button>
       </div>
-      <Badge v-for="id in toInvite" class="mr-1">
+      <Badge v-for="id in toInvite" class="ml-2 -mr-1 bg-gradient-to-br from-primary-700 to-rose-500">
         <p>{{ contactRefs.contacts.value.find(c => c.id === id).nickname }}
           <a class="cursor-pointer font-light" @click="deleteInvite(id);"> X </a>
         </p>
       </Badge>
-      <div v-for="contact in filteredContacts" class="p-2">
-        <Checkbox :checked="isChecked(contact['id'])" class="mx-2 gray" @click="checkboxClick(contact['id'])">
-        </Checkbox>
-        <Avatar class="mx-2">
+      <div v-for="contact in filteredContacts" class="w-fit p-2 hover:cursor-pointer" @click="checkboxClick(contact['id'])">
+        <Checkbox :checked="isChecked(contact['id'])"
+                  class="mx-2 border-gray-300 align-middle"/>
+        <Avatar class="mx-2 drop-shadow">
           {{ contact['nickname'].substring(0, 1) }}
         </Avatar>
         <span>{{ contact['nickname'] }}</span>

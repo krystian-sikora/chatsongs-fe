@@ -12,7 +12,7 @@ const { users } = defineProps(['users'])
     <h2 class="inline-block mr-2">Currently listening:</h2>
     <div v-for="user in users" :key="user.id" class="*:-mr-4 inline-block">
       <Tooltip :onHoverText="user.nickname">
-        <Avatar class="border-2 border-white">
+        <Avatar class="border-2 border-secondary">
           {{ user.nickname.substring(0, 5) }}
         </Avatar>
       </Tooltip>

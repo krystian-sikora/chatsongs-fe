@@ -12,6 +12,8 @@ const authRefs = storeToRefs(authStore)
 
 const messagePreview = ref(constructMsgPreview())
 
+const isHovered = ref(false)
+
 function constructMsgPreview() {
   if (props.chat.messages.length === 0) return ''
 
@@ -32,8 +34,8 @@ onUpdated(() => {
 </script>
 
 <template>
-  <div :class="props.isCurrentChat ? 'rounded-md bg-gray-200 drop-shadow' : ''"
-       class="hover:rounded-md hover:bg-gray-200 hover:drop-shadow mb-1">
+  <div @mouseover="isHovered = true" @mouseout="isHovered = false" :class="props.isCurrentChat ? 'rounded-md bg-gradient-to-br from-primary-700 to-rose-500 drop-shadow' : ''"
+       class="hover:rounded-md hover:bg-gradient-to-br hover:from-primary-700/80 hover:to-rose-500/80 hover:drop-shadow hover:text-white mb-1">
     <div class="inline-block relative">
       <Avatar class="my-2 mx-2 drop-shadow">
         {{ props.chat.name.substring(0, 1) }}
@@ -42,11 +44,11 @@ onUpdated(() => {
     </div>
     <div class="inline-block contain-inline-size w-[calc(100%-56px)] my-auto align-middle pr-2">
 
-      <p class="truncate">
+      <p class="truncate" :class="isCurrentChat ? 'text-primary-50 font-bold' : ''">
         <IconMusicSingleNote v-if="props.isCurrentPlayback" class="w-4 -mr-1 animate-pulse inline-block self-baseline"/>
         {{ props.chat.name }}
       </p>
-      <p class="truncate text-gray-500"> {{ messagePreview }}</p>
+      <p class="truncate" :class="isCurrentChat || isHovered ? 'text-primary-100' : 'text-gray-500'"> {{ messagePreview }}</p>
     </div>
   </div>
 </template>
