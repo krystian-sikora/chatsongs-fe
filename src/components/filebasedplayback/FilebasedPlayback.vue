@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button/index.js";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { ErrorMessage } from "vee-validate";
 import CurrentlyListeningUsers from "@/components/filebasedplayback/CurrentlyListeningUsers.vue";
 import SongQueueTable from "@/components/filebasedplayback/MusicTabs.vue";
@@ -14,10 +14,18 @@ import IconLogout from "@/components/icons/IconLogout.vue";
 import SimpleTooltip from "@/components/SimpleTooltip.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert/index.js";
 import { AlertCircle } from 'lucide-vue-next'
+import { HollowDotsSpinner } from "epic-spinners";
 
 const { chatId, filebasedPlaybackStore } = defineProps(['chatId', 'filebasedPlaybackStore'])
 const { isInSession, queue, backtrack, playbackData, isError, sessionChatId } = storeToRefs(filebasedPlaybackStore)
 const authStore = useAuthStore()
+const isJoinPending = ref(false)
+
+watch(isInSession, (isInSession) => {
+  if (isInSession) {
+    isJoinPending.value = false
+  }
+})
 
 onMounted(() => {
   authStore.isAuthenticated()
@@ -34,9 +42,11 @@ onMounted(() => {
         with your friends!
       </h1>
       <div class="flex items-center justify-center">
-        <Button class="text-xl p-6" @click="joinFilebasedPlayback(chatId ? chatId : 402)">Join playback now!</Button>
+        <Button class="text-xl p-6 w-52" @click="isJoinPending=true; joinFilebasedPlayback(chatId ? chatId : 402)">
+          <HollowDotsSpinner v-if="isJoinPending"/>
+          <span v-else>Join playback now!</span>
+        </Button>
       </div>
-
     </div>
 
     <ErrorMessage v-if="isError">Error while joining playback</ErrorMessage>

@@ -9,6 +9,7 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert/index.js";
 import { AlertCircle } from "lucide-vue-next";
+import { HollowDotsSpinner } from "epic-spinners";
 
 const { playbackData } = defineProps(['playbackData'])
 const emits = defineEmits(['update:playbackData'])
@@ -18,6 +19,7 @@ const authStore = useAuthStore()
 const { tokens: authTokens } = storeToRefs(authStore)
 
 const isSent = ref(false);
+const isSendPending = ref(false);
 const isError = ref(false);
 
 async function addSong() {
@@ -43,10 +45,12 @@ function postSong(song) {
   axios.request(config)
       .then((response) => {
         isSent.value = true
+        isSendPending.value = false
         isError.value = false
         playbackData ? emits('update:playbackData', response.data) : null
       })
       .catch((error) => {
+        isSendPending.value = false
         isError.value = true
         console.log(error)
       });
@@ -56,11 +60,14 @@ function postSong(song) {
 
 <template>
   <Label for="song">Add an audio file from device</Label>
-  <div class="flex gap-1">
-    <div class="grid w-full max-w-sm items-center gap-1.5">
+  <div class="flex flex-wrap md:flex-nowrap gap-1">
+    <div class=" max-w-sm items-center gap-1.5">
       <Input id="song" accept="audio/*" type="file"/>
     </div>
-    <Button @click="addSong">Add</Button>
+    <Button class="min-w-[122px]" @click="isSendPending = true; addSong()">
+      <HollowDotsSpinner v-if="isSendPending" :size="5"/>
+      <span v-else>Add song</span>
+    </Button>
   </div>
   <Transition>
     <Alert v-if="isError" class="mx-auto my-2 bg-white" variant="destructive">

@@ -7,7 +7,7 @@ export const useAuthStore = defineStore('auth', {
     state: () => ({
         tokens: ref(),
         user: ref(),
-        error: ref()
+        error: ref(null)
     }),
     actions: {
         login(email, password) {
@@ -17,7 +17,7 @@ export const useAuthStore = defineStore('auth', {
                 }
             ).catch(
                 (res) => {
-                    console.warn('could not login', res)
+                    // console.warn('could not login', res)
                     this.tokens = null
                     this.user = null
                     this.error = res
@@ -33,7 +33,12 @@ export const useAuthStore = defineStore('auth', {
                 (res) => {
                     this.setTokens(res.data)
                 }
-            )
+            ).catch((error) => {
+                // console.warn('could not register', error)
+                this.tokens = null
+                this.user = null
+                this.error = error
+            })
         },
         refresh() {
             return refresh(localStorage.getItem('refresh_token')).then(

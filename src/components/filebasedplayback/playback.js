@@ -358,6 +358,13 @@ export function quitSession() {
     const pbStore = useFilebasedPlaybackStore()
     const { sessionChatId, playbackData, isInSession, isError, queue, backtrack, currentlyListeningUsers } = storeToRefs(pbStore)
 
+    playbackData.value = null
+    isInSession.value = false
+    isError.value = false
+    queue.value = []
+    backtrack.value = []
+    currentlyListeningUsers.value = []
+
     let config = {
         method: 'delete',
         maxBodyLength: Infinity,
@@ -369,16 +376,5 @@ export function quitSession() {
     }
 
     axios.request(config)
-        .then((response) => {
-            playbackData.value = null
-            isInSession.value = false
-            isError.value = false
-            queue.value = []
-            backtrack.value = []
-            currentlyListeningUsers.value = []
-        })
-        .catch((error) => {
-            console.log(error)
-        });
 }
 
