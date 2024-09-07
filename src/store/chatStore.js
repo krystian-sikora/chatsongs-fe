@@ -6,14 +6,24 @@ import router from '@/router/router.js'
 export const useChatStore = defineStore('chats', {
     state: () => {
         return {
-            chats: ref([])
+            chats: ref([]),
+            chatsEmpty: ref(false),
+            isLoading: ref(false)
         }
     },
     actions: {
         getChats(token) {
+            this.isLoading = true
             getChats(token).then(
                 (res) => {
+                    this.isLoading = false
                     this.chats = res.data
+                    this.chatsEmpty = res.data.length === 0;
+                }
+            ).catch(
+                (err) => {
+                    this.isLoading = false
+                    console.log(err)
                 }
             )
         },

@@ -90,7 +90,7 @@ function updateShowChatPreviews() {
         </p>
       </Badge>
       <ScrollArea class="bg-white rounded-md mx-2 my-2 h-56 drop-shadow">
-        <div v-for="contact in filteredContacts" class="w-fit p-2 hover:cursor-pointer" @click="checkboxClick(contact['id'])">
+        <div v-for="contact in filteredContacts" class="w-full p-2 hover:cursor-pointer" @click="checkboxClick(contact['id'])">
           <Checkbox :checked="isChecked(contact['id'])"
                     class="mx-2 border-gray-300 align-middle"/>
           <Avatar class="mx-2 drop-shadow">
