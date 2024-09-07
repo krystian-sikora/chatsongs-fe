@@ -32,6 +32,7 @@ const emit = defineEmits(['update:showChatPreviews'])
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const filebasedPlaybackStore = useFilebasedPlaybackStore()
+const { sessionChatId, isInSession } = storeToRefs(filebasedPlaybackStore)
 
 const authStore = useAuthStore()
 const authRefs = storeToRefs(authStore)
@@ -72,6 +73,8 @@ function initWebSocketConnection() {
 }
 
 function sendMessage() {
+  if (chatInput.value === '') return
+
   stompClient.publish({
     destination: "/app/chat",
     body:
@@ -86,7 +89,7 @@ function sendMessage() {
 onMounted(() => {
   scrollToBottom()
   contactStore.getContacts(token)
-  playbackStore.refresh(authRefs.tokens.value['access_token'])
+  // playbackStore.refresh(authRefs.tokens.value['access_token'])
   initWebSocketConnection()
 })
 
@@ -158,7 +161,7 @@ function updateShowChatPreviews() {
       <div>
         <IconBack @click="updateShowChatPreviews" class="lg:hidden inline-block w-6 mr-3 hover:cursor-pointer "/>
         <h1 class="text-secondary font-bold inline-block align-middle truncate contain-inline-size"
-          :class="isCurrentPlayback ? 'w-[calc(100%-264px-36px)]' : 'w-[calc(100%-88px-36px-116px)] md:w-[calc(100%-88px-36px-116px)]'">
+          :class="isInSession ? 'w-[calc(100%-88px-24px-12px-116px)]' : 'w-[calc(100%-88px-24px-12px)] md:w-[calc(100%-88px-36px-116px)]'">
           <span class="drop-shadow-[1px_1px_1px_rgba(255,255,255,1)] bg-gradient-to-br from-primary-700 to-rose-500 text-transparent bg-clip-text font-bold">
             {{ props.currentChat.name }}
           </span>

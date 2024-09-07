@@ -7,6 +7,8 @@ import axios from "axios";
 import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert/index.js";
+import { AlertCircle } from "lucide-vue-next";
 
 const { playbackData } = defineProps(['playbackData'])
 const emits = defineEmits(['update:playbackData'])
@@ -53,17 +55,43 @@ function postSong(song) {
 </script>
 
 <template>
-  <Label for="song">Add an MP3 song file from device</Label>
+  <Label for="song">Add an audio file from device</Label>
   <div class="flex gap-1">
     <div class="grid w-full max-w-sm items-center gap-1.5">
       <Input id="song" accept="audio/*" type="file"/>
     </div>
     <Button @click="addSong">Add</Button>
-    <h2 v-if="isError">error while sending file</h2>
-    <h2 v-if="isSent && !isError">file sent successfully</h2>
   </div>
+  <Transition>
+    <Alert v-if="isError" class="mx-auto my-2 bg-white" variant="destructive">
+      <AlertCircle class="w-4 h-4" />
+      <div class="flex justify-between">
+        <AlertTitle class="mt-1">Error while sending file</AlertTitle>
+        <span class="-mt-1 hover:cursor-pointer" @click="isError = false">X</span>
+      </div>
+      <AlertDescription class="*:whitespace-pre-wrap">
+        Make sure to check that the file:
+        <ol class="list-disc *:ml-5">
+          <li>is correctly selected</li>
+          <li>has size less than 50Mb</li>
+          <li>has correct audio format</li>
+        </ol>
+      </AlertDescription>
+    </Alert>
+  </Transition>
+  <h2 v-if="isSent && !isError">file sent successfully</h2>
 </template>
 
 <style scoped>
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 
 </style>

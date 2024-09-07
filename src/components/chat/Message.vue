@@ -39,7 +39,7 @@ function getDate(createdAt) {
 
     <div v-if="isUserMessage" class="float-right">
       <SimpleTooltip :onHoverText="getDate(props.message.createdAt)">
-        <h1 class="inline-block bg-gradient-to-br from-primary-700 to-rose-500 text-secondary  border rounded-md mt-2 py-2 px-3 max-w-[calc(100%-112px)] ml-[56px]">
+        <h1 class="break-words inline-block bg-gradient-to-br from-primary-700 to-rose-500 text-secondary  border rounded-md mt-2 py-2 px-3 max-w-[calc(100%-112px)] ml-[56px]">
           {{ props.message.content }}
         </h1>
       </SimpleTooltip>
@@ -57,8 +57,8 @@ function getDate(createdAt) {
           {{ props.message.senderName.substring(0, 1) }}
         </Avatar>
       </SimpleTooltip>
-      <SimpleTooltip :onHoverText="new Date(props.message.createdAt)">
-        <h1 class="inline-block bg-white border rounded-md mt-2 py-2 px-3 max-w-[calc(100%-112px)]"> {{ props.message.content }} </h1>
+      <SimpleTooltip :onHoverText="getDate(props.message.createdAt)">
+        <h1 class="break-words inline-block bg-white border rounded-md mt-2 py-2 px-3 max-w-[calc(100%-112px)]"> {{ props.message.content }} </h1>
       </SimpleTooltip>
     </div>
     <div class="clear-both"></div>

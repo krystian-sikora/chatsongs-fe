@@ -67,8 +67,8 @@ function isCurrentPlayback(chatId) {
 </script>
 
 <template>
-  <div class="bg-secondary h-max rounded-md">
-    <ScrollArea class="h-[calc(100vh-60px)]">
+  <div class="bg-secondary h-max md:rounded-md">
+    <ScrollArea class="h-[calc(100vh-60px)] md:rounded-md">
       <div v-for="chat in chatRefs.chats.value" v-if="chats"
            class="cursor-pointer first:mt-20 pl-2 pr-2" @click="viewChat(chat)">
         <ChatPreview :chat="chat" :contactRefs="contactRefs" :isCurrentChat="isCurrentChat(chat.id)"
@@ -79,14 +79,9 @@ function isCurrentPlayback(chatId) {
         <DummyChatPreview @click="[emit('update:showChatPreviews', false), emit('update:isCreatingNewChat', false)]" class="rounded-md bg-secondary drop-shadow hover:cursor-pointer"/>
       </div>
     </ScrollArea>
-
-    <div class="absolute bottom-0 w-full border-t bg-secondary drop-shadow h-16 justify-center flex-col flex lg:hidden">
-      <div class="*:inline-block *:w-10 *:p-1 *:ml-3">
-        <SidebarIcons/>
-      </div>
+    <div class="absolute bottom-0 w-full border-t drop-shadow h-16 justify-center flex-col flex lg:hidden">
+      <SidebarIcons class="rounded-md bg-white m-1 py-1 drop-shadow flex justify-center space-x-7 *:w-10 *:p-1"/>
     </div>
-
-
     <div class="absolute top-0 w-full border-b rounded-t-md backdrop-blur drop-shadow h-16 flex justify-center flex-col">
       <div class="*:inline-block">
         <IconNewChat class="drop-shadow w-7 m-2 float-end cursor-pointer"

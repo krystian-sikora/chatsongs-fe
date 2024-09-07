@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button/index.js'
 import { useChatStore } from "@/store/chatStore.js";
 import Badge from "../ui/badge/Badge.vue";
 import IconBack from "@/components/icons/IconBack.vue";
+import Contacts from "@/components/Contacts.vue";
+import { ScrollArea } from "@/components/ui/scroll-area/index.js";
 
 const props = defineProps(['currentChat', 'isCreatingNewChat'])
 const emit = defineEmits(['update:isCreatingNewChat', 'update:showChatPreviews'])
@@ -66,33 +68,40 @@ function updateShowChatPreviews() {
 </script>
 
 <template>
-  <div>
+  <div class="relative">
     <div class="font-bold border-b rounded-t-md px-2 md:px-6 h-16 w-full backdrop-blur drop-shadow flex justify-center flex-col">
       <div>
         <IconBack @click="updateShowChatPreviews" class="lg:hidden inline-block w-6 mr-3 hover:cursor-pointer "/>
-        <h1 class="drop-shadow-[1px_1px_1px_rgba(255,255,255,1)] bg-gradient-to-br from-primary-700 to-rose-500 text-transparent bg-clip-text font-bold inline-block align-middle">Create new chat</h1>
+        <h1 class="drop-shadow-[1px_1px_1px_rgba(255,255,255,1)] bg-gradient-to-br from-primary-700 to-rose-500 text-transparent bg-clip-text font-bold inline-block align-middle">
+          Create new chat
+        </h1>
 <!--        <Input v-model="searchInput" class="inline-block mr-3 w-1/2" placeholder="Search"></Input>-->
 <!--        <Button class="inline-block" @click="create()">Create chat</Button>-->
       </div>
     </div>
     <div>
-      <div class="flex mt-4 mx-2" :class="toInvite.length === 0 ? 'mb-7' : 'mb-1'">
-        <Input v-model="searchInput" class="inline-block mr-3" placeholder="Search"></Input>
-        <Button class="inline-block" @click="create()">Create chat</Button>
+      <div class="flex mt-4 mx-2" :class="toInvite.length === 0 ? 'mb-[2.3rem]' : 'mb-1'">
+        <Input v-model="searchInput" class="flex-1 mr-3 shrink" placeholder="Search"></Input>
+        <Button class="flex-initial" @click="create()">Create</Button>
       </div>
       <Badge v-for="id in toInvite" class="ml-2 -mr-1 bg-gradient-to-br from-primary-700 to-rose-500">
         <p>{{ contactRefs.contacts.value.find(c => c.id === id).nickname }}
           <a class="cursor-pointer font-light" @click="deleteInvite(id);"> X </a>
         </p>
       </Badge>
-      <div v-for="contact in filteredContacts" class="w-fit p-2 hover:cursor-pointer" @click="checkboxClick(contact['id'])">
-        <Checkbox :checked="isChecked(contact['id'])"
-                  class="mx-2 border-gray-300 align-middle"/>
-        <Avatar class="mx-2 drop-shadow">
-          {{ contact['nickname'].substring(0, 1) }}
-        </Avatar>
-        <span>{{ contact['nickname'] }}</span>
-      </div>
+      <ScrollArea class="bg-white rounded-md mx-2 my-2 h-56 drop-shadow">
+        <div v-for="contact in filteredContacts" class="w-fit p-2 hover:cursor-pointer" @click="checkboxClick(contact['id'])">
+          <Checkbox :checked="isChecked(contact['id'])"
+                    class="mx-2 border-gray-300 align-middle"/>
+          <Avatar class="mx-2 drop-shadow">
+            {{ contact['nickname'].substring(0, 1) }}
+          </Avatar>
+          <span>{{ contact['nickname'] }}</span>
+        </div>
+      </ScrollArea>
+
+<!--      If you don't see the person you're looking for, you can invite them by entering their user code below:-->
+      <Contacts noX="true"/>
     </div>
   </div>
 </template>

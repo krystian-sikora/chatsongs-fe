@@ -2,6 +2,7 @@
 
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table/index.js";
 import IconThreeDots from "@/components/icons/IconThreeDots.vue";
+import { ScrollArea } from "@/components/ui/scroll-area/index.js";
 
 const { backtrack } = defineProps(['backtrack'])
 
@@ -16,6 +17,7 @@ const { backtrack } = defineProps(['backtrack'])
       </TableRow>
     </TableHeader>
     <TableBody>
+      <ScrollArea class="h-[200px] rounded-md bg-white">
       <TableRow v-for="(songQueueObj, index) in backtrack" :key="songQueueObj.id">
         <TableCell>
           {{ -index - 1 }}
@@ -27,6 +29,7 @@ const { backtrack } = defineProps(['backtrack'])
           <IconThreeDots class="w-5 float-end"/>
         </TableCell>
       </TableRow>
+      </ScrollArea>
     </TableBody>
   </Table>
 </template>

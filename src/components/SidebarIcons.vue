@@ -13,9 +13,9 @@ const { fillColor, strokeColor } = defineProps(['fillColor', 'strokeColor'])
 
 <template>
   <div>
-    <IconChats :strokeColor="strokeColor"></IconChats>
-    <IconInviteUser @click="router.push({ path: '/contacts' })" :fillColor="fillColor"></IconInviteUser>
-    <IconLogout @click="authStore.logout()" :fillColor="fillColor"/>
+    <IconChats/>
+    <IconInviteUser @click="router.push({ path: '/contacts' })"></IconInviteUser>
+    <IconLogout @click="authStore.logout()"/>
   </div>
 </template>
 

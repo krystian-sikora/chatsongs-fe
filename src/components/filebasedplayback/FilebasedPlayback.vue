@@ -56,7 +56,7 @@ onMounted(() => {
         </AlertDescription>
       </Alert>
       <CurrentlyListeningUsers :users="playbackData['active_users']" class="my-2"/>
-      <SongQueueTable :music="queue" :backtrack='backtrack'/>
+      <SongQueueTable :music="queue" :backtrack='backtrack' class="mb-2"/>
       <FilesInput :playbackData="playbackData" @update:playbackData="splitSongQueue"/>
     </div>
   </div>
