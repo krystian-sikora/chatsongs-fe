@@ -49,10 +49,9 @@ function postSong(song) {
         isError.value = false
         playbackData ? emits('update:playbackData', response.data) : null
       })
-      .catch((error) => {
+      .catch(() => {
         isSendPending.value = false
         isError.value = true
-        console.log(error)
       });
 }
 
@@ -86,7 +85,7 @@ function postSong(song) {
       </AlertDescription>
     </Alert>
   </Transition>
-  <h2 v-if="isSent && !isError">file sent successfully</h2>
+<!--  <h2 v-if="isSent && !isError">file sent successfully</h2>-->
 </template>
 
 <style scoped>

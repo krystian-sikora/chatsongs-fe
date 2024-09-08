@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button/index.js'
 import { useChatStore } from "@/store/chatStore.js";
 import Badge from "../ui/badge/Badge.vue";
 import IconBack from "@/components/icons/IconBack.vue";
-import Contacts from "@/components/Contacts.vue";
 import { ScrollArea } from "@/components/ui/scroll-area/index.js";
 
 const props = defineProps(['currentChat', 'isCreatingNewChat'])
@@ -101,7 +100,7 @@ function updateShowChatPreviews() {
       </ScrollArea>
 
 <!--      If you don't see the person you're looking for, you can invite them by entering their user code below:-->
-      <Contacts noX="true"/>
+<!--      <Contacts noX="true"/>-->
     </div>
   </div>
 </template>

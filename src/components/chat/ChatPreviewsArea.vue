@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area/index.js";
 import { useChatStore } from "@/store/chatStore.js";
 import { storeToRefs } from "pinia";
 import router from "@/router/router.js";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useContactStore } from "@/store/contactStore.js";
 import SidebarIcons from "@/components/SidebarIcons.vue";
 import DummyChatPreview from "@/components/chat/DummyChatPreview.vue";
@@ -23,23 +23,24 @@ const contactRefs = storeToRefs(contactStore)
 
 const playbackRefs = storeToRefs(usePlaybackStore())
 
-console.log(chatRefs.chats.value)
-
-watch(chatRefs.chats.value , (newChats) => {
+function sortChats(newChats) {
   let x = new Array(...newChats)
   filteredChats.value = x.sort((c1, c2) => {
     let date1 = new Date(c1.messages.length === 0 ? c1.created_at : c1.messages[c1.messages.length - 1]?.createdAt);
     let date2 = new Date(c2.messages.length === 0 ? c2.created_at : c2.messages[c2.messages.length - 1]?.createdAt);
     return date2 - date1;
   })
-})
-
-function sortByMessages(c1, c2) {
-  console.log('sorting')
-  return
 }
 
+watch(chatRefs.chats.value , (newChats) => {
+  sortChats(newChats);
+})
+
 const filteredChats = ref([...chatRefs.chats.value])
+
+onMounted(() => {
+  sortChats(chatRefs.chats.value)
+})
 
 const chats = computed(() => {
   return !!chatRefs.chats.value;

@@ -15,22 +15,10 @@ const hasPrevious = (backtrack) => {
     return backtrack.value?.length > 0
 }
 
-const getBacktrack = () => {
-    const pbStore = useFilebasedPlaybackStore()
-    const { backtrack } = storeToRefs(pbStore)
-    return backtrack
-}
-
 const maintainState = (audioElement) => {
     const pbStore = useFilebasedPlaybackStore()
     const { isPlaying } = storeToRefs(pbStore)
     if (isPlaying.value) audioElement.play()
-}
-
-const getPlaybackData = () => {
-    const pbStore = useFilebasedPlaybackStore()
-    const { queue } = storeToRefs(pbStore)
-    return { queue }
 }
 
 const getFbPbStore = () => {
@@ -40,11 +28,6 @@ const getFbPbStore = () => {
 
 export function getSongUri(song) {
     return apiUrl + '/songs/' + song
-}
-
-export function getCurrentSong() {
-    const playbackData = getPlaybackData()
-    return playbackData.value[0]
 }
 
 export function attachListeners() {
@@ -81,7 +64,9 @@ export function next(post = true) {
     const { queue, backtrack } = getFbPbStore()
 
     if (!hasNext(queue)) {
-        backtrack.value.unshift(queue.value.shift())
+        // backtrack.value.unshift(queue.value.shift())
+        audioElement.currentTime = 0
+        pause(false)
         return
     }
 
@@ -164,7 +149,6 @@ function patchSongs() {
         newQueue.push(track)
     }
 
-    console.log('newQueue', newQueue)
 
     let config = {
         method: 'patch',
@@ -178,12 +162,6 @@ function patchSongs() {
     }
 
     axios.request(config)
-        .then((response) => {
-            console.log(response.data)
-        })
-        .catch((error) => {
-            console.log(error)
-        });
 }
 
 function postAction(action, index = 0) {
@@ -200,7 +178,7 @@ function postAction(action, index = 0) {
           "timestamp": "${ new Date().toISOString() }",
           "current_time": ${ audioElement.currentTime },
           "is_playing": ${ isPlaying.value },
-            "index": ${ index }
+          "index": ${ index }
         }`
     })
 }
@@ -209,14 +187,12 @@ export function initWebSocketConnection() {
     const authStore = useAuthStore()
     const { user, tokens } = storeToRefs(authStore)
 
-    let socket = new SockJS(apiUrl + '/playback')
-    stompClient = Stomp.over(socket)
-    stompClient.connect({ 'Authorization': `Bearer ${ tokens.value['access_token'] }` }, function (frame) {
-        console.log('Connected: ' + frame)
+    stompClient = Stomp.over(() => {
+        return new SockJS(apiUrl + '/playback')
+    })
+    stompClient.connect({ 'Authorization': `Bearer ${ tokens.value['access_token'] }` }, function () {
         stompClient.subscribe(`/user/${ user.value['id'] }/queue/playback`, (message) => {
-            console.log(`filebased playback message: ${message.body}`)
             let json = JSON.parse(message.body)
-            console.log(json)
             let delay = new Date() - new Date(json.timestamp)
 
             switch (json.action) {
@@ -292,8 +268,7 @@ export function joinFilebasedPlayback(chatId) {
             isError.value = false
             attachListeners()
         })
-        .catch((error) => {
-            console.log(error)
+        .catch(() => {
             isInSession.value = false
             isError.value = true
         });
@@ -326,8 +301,7 @@ export function refreshPlaybackData() {
             isInSession.value = true
             isError.value = false
         })
-        .catch((error) => {
-            console.log(error)
+        .catch(() => {
             isInSession.value = false
             isError.value = true
         });

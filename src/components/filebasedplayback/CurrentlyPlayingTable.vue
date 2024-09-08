@@ -34,7 +34,7 @@ function alterState() {
       </TableRow>
     </TableHeader>
     <TableBody>
-      <ScrollArea class="h-[200px] rounded-md bg-white">
+      <ScrollArea v-if="music.length !== 0" class="h-[200px] rounded-md bg-white">
         <TableRow v-for="(songQueueObj, index) in music" :key="songQueueObj.id"
                   :class="index === 0 ? 'bg-gradient-to-br from-primary-700 to-rose-500 text-transparent bg-clip-text font-bold': '' "
                   class="hover:cursor-pointer"

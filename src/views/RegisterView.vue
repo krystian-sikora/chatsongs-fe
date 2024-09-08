@@ -50,7 +50,6 @@ const form = useForm({
 
 const onSubmit = form.handleSubmit((values) => {
   isPending.value = true
-  console.log('Form submitted!', values)
   authStore.register(values.email, values.username, values.password)
 })
 

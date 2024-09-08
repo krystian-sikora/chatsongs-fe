@@ -18,8 +18,6 @@ const token = authRefs.tokens.value['access_token']
 const error = ref(null)
 
 onMounted(() => {
-  if (!token) console.log('No token')
-
   spotifyCallback(token, router.currentRoute.value.query)
       .then(() => {
         spotifyStore.isLoggedIn = true

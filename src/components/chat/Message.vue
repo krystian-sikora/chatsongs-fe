@@ -36,7 +36,7 @@ function getDate(createdAt) {
 </script>
 
 <template>
-
+  <div>
     <div v-if="isUserMessage" class="float-right">
       <SimpleTooltip :onHoverText="getDate(props.message.createdAt)">
         <h1 class="break-words inline-block bg-gradient-to-br from-primary-700 to-rose-500 text-secondary  border rounded-md mt-2 py-2 px-3 max-w-[calc(100%-112px)] ml-[56px]">
@@ -62,5 +62,5 @@ function getDate(createdAt) {
       </SimpleTooltip>
     </div>
     <div class="clear-both"></div>
-
+  </div>
 </template>

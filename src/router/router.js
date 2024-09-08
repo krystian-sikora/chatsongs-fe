@@ -5,8 +5,6 @@ import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import Contacts from "@/components/Contacts.vue";
 import { useAuthStore } from "@/store/authStore.js";
-import CallbackView from "@/views/CallbackView.vue";
-import TestView from "@/views/TestView.vue";
 
 const routes = [
     { path: '/', redirect: '/chat' },
@@ -15,8 +13,6 @@ const routes = [
     { path: '/login', component: LoginView },
     { path: '/register', component: RegisterView },
     { path: '/contacts', component: Contacts },
-    { path: '/callback', component: CallbackView },
-    { path: '/test', component: TestView }
 ]
 
 const router = createRouter({

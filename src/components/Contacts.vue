@@ -36,7 +36,6 @@ function invite() {
       contactStore.contacts.push(response.data)
       addedContacts.value.push(response.data)
       newContact.value = response.data
-      console.log(response)
     }
   ).catch(
     (err) => {

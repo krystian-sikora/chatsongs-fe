@@ -102,7 +102,6 @@ const showChatPreviews = ref(false)
 
 function updateShowChatPreviews(bool) {
   showChatPreviews.value = bool
-  console.log(bool)
 }
 
 function loadScript() {
@@ -113,15 +112,11 @@ function loadScript() {
 
   window.onSpotifyWebPlaybackSDKReady = () => {
     if (!tokens.value['access_token']) {
-      console.log('no token, watching for changes', tokens.value)
       watch(() => tokens.value, (newTokens) => {
-        console.log('new token', tokens.value)
         if (!newTokens['access_token']) return
-        console.log(tokens.value)
         initPlayer()
       })
     } else {
-      console.log('token found', tokens.value)
       initPlayer()
     }
   }
@@ -138,25 +133,21 @@ function initPlayer() {
 
   player.addListener('ready', ({ device_id }) => {
     playbackStore.setDevice(authToken, device_id, true)
-    console.log('Ready with Device ID', device_id);
   });
 
   player.addListener('not_ready', ({ device_id }) => {
     playbackStore.setDevice(authToken, device_id, false)
-    console.log('Device ID has gone offline', device_id);
   });
 
-  player.addListener('player_state_changed', ({position, duration, track_window: { current_track } }) => {
+  player.addListener('player_state_changed', ({track_window: { current_track } }) => {
     currentlyPlaying.value = `${current_track.artists[0].name} - ${current_track.name}`
   });
 
   player.connect();
 
   watch(() => currentPlayback.value, (newPlayback) => {
-    console.log('changed', newPlayback)
     if (!newPlayback) {
       player.pause()
-      console.log('paused')
     }
   })
 }

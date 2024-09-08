@@ -21,9 +21,8 @@ export const useChatStore = defineStore('chats', {
                     this.chatsEmpty = res.data.length === 0;
                 }
             ).catch(
-                (err) => {
+                () => {
                     this.isLoading = false
-                    console.log(err)
                 }
             )
         },
@@ -34,7 +33,6 @@ export const useChatStore = defineStore('chats', {
         createChat(token, users) {
             createChat(token, users).then(
                 (res) => {
-                    console.log(res)
                     this.chats.push(res.data)
                     router.push({ path: `/chat/${ res.data.id }` })
                 }

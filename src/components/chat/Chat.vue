@@ -25,6 +25,7 @@ import FilebasedPlayback from "@/components/filebasedplayback/FilebasedPlayback.
 import { useFilebasedPlaybackStore } from "@/store/filebasedPlaybackStore.js";
 import PlaybackControls from "@/components/filebasedplayback/PlaybackControls.vue";
 import { Form } from "vee-validate";
+import { DialogTitle } from "@/components/ui/dialog/index.js";
 
 const props = defineProps(['currentChat', 'currentlyPlaying', 'globalAudio'])
 const emit = defineEmits(['update:showChatPreviews'])
@@ -54,15 +55,13 @@ const scrollAreaRef = ref(null)
 let stompClient = null
 
 function initWebSocketConnection() {
-  let socket = new SockJS(apiUrl + '/chat')
-  stompClient = Stomp.over(socket)
-  stompClient.connect({ 'Authorization': `Bearer ${ token }` }, function (frame) {
-    console.log('Connected: ' + frame)
-    stompClient.subscribe('/topic/messages', function (messageOutput) {
-      console.log(messageOutput.body)
+  stompClient = Stomp.over(() => {
+    return new SockJS(apiUrl + '/chat')
+  })
+  stompClient.connect({ 'Authorization': `Bearer ${ token }` }, function () {
+    stompClient.subscribe('/topic/messages', function () {
     });
     stompClient.subscribe(`/user/${ authRefs.user.value['id'] }/queue/messages`, (message) => {
-      // console.log(`Received direct msg: ${message.body}`)
       let json = JSON.parse(message.body)
       chatRefs.chats.value.find(c => c['id'] === json['chatId']).messages.push(json)
 
@@ -121,16 +120,17 @@ function scrollToBottom() {
   nextTick(() => {
     if (contentRef.value === null) return
     const latestMessage = contentRef.value[contentRef.value.length - 1];
-    latestMessage.scrollIntoView(false)
+    try {
+      latestMessage.scrollIntoView(false)
+    } catch (e) {
+
+    }
   })
 }
 
 function spotifyLoginRedirect() {
   spotifyLogin(authRefs.tokens.value['access_token']).then((response) => {
-    console.log(response)
     window.location = response.data
-  }).catch((error) => {
-    console.error(error)
   })
 }
 
@@ -201,7 +201,9 @@ function updateShowChatPreviews() {
 <!--        </div>-->
 <!--      </SheetContent>-->
       <SheetContent class="bg-secondary">
-        <SheetHeader>Playback</SheetHeader>
+        <DialogTitle>
+          <SheetHeader>Playback</SheetHeader>
+        </DialogTitle>
         <FilebasedPlayback :filebasedPlaybackStore="filebasedPlaybackStore" :chatId="currentChat.id"/>
       </SheetContent>
     </Sheet>
