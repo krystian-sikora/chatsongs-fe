@@ -1,29 +1,21 @@
-# chatsongs
+# Chatsongs
 
-This template should help get you started developing with Vue 3 in Vite.
+In today's digital communication landscape, text messaging applications play a vital role in connecting people, allowing real-time exchange of thoughts, information, and emotions. This project, called Chatsongs, goes beyond traditional messaging by enabling users to not only chat but also enjoy synchronized music playback together, enhancing the social experience.
 
-## Recommended IDE Setup
+- [backend repo](https://github.com/krystian-sikora/chatsongs)
+- [hosted app](https://chatsongs-fe.vercel.app/)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### Why Chatsongs?
 
-## Customize configuration
+The idea behind Chatsongs combines my passion for music and programming. I wanted to create a platform that enables users to share music in real-time within their chats. At the time of development, no text communication app offered integrated synchronized music playback, which motivated me to choose this as my bachelor's thesis project.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+### Key Features
+- **Real-Time Messaging:** Powered by WebSockets, ensuring seamless communication.
+- **Synchronized Music Playback:** Users can upload and share music files, allowing simultaneous playback across chat participants.
+- **Full-Stack Solution:** Built with Vue.js for the frontend and Spring framework for the backend.
+### Technologies Used
+- **Frontend:** Vue.js (SPA architecture)
+- **Backend:** Spring Framework (Java)
+- **Real-Time Communication:** WebSockets for messaging
+- **Database:** PostgreSQL
+- **Other:** Axios for API requests, Pinia for state management, and TailwindCSS for responsive design
