@@ -3,7 +3,6 @@
 In today's digital communication landscape, text messaging applications play a vital role in connecting people, allowing real-time exchange of thoughts, information, and emotions. This project, called Chatsongs, goes beyond traditional messaging by enabling users to not only chat but also enjoy synchronized music playback together, enhancing the social experience.
 
 - [backend repo](https://github.com/krystian-sikora/chatsongs)
-- [hosted app](https://chatsongs-fe.vercel.app/)
 
 ### Why Chatsongs?
 
